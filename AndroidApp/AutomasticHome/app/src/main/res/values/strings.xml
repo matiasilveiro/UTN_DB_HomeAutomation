@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Automastic Home</string>
+
+
+    <!-- SignInFragment layout strings -->
+    <string name="fragment_signin_username">Usuario</string>
+    <string name="fragment_signin_password">Contraseña</string>
+    <string name="fragment_signin_remember_me">Recordarme</string>
+    <string name="fragment_signin_forgot_password">¿Olvido su contraseña?</string>
+    <string name="fragment_signin_login_button">Ingresar</string>
+    <string name="fragment_signin_signup_button">REGISTRARSE</string>
+</resources>
