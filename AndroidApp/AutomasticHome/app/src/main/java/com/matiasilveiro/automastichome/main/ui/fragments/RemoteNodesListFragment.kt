@@ -8,12 +8,18 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.matiasilveiro.automastichome.R
 import com.matiasilveiro.automastichome.core.ui.BaseViewState
 import com.matiasilveiro.automastichome.core.utils.exhaustive
 import com.matiasilveiro.automastichome.core.utils.snack
 import com.matiasilveiro.automastichome.databinding.FragmentRemoteNodesListBinding
+import com.matiasilveiro.automastichome.main.ui.adapters.CentralNodesAdapter
+import com.matiasilveiro.automastichome.main.ui.adapters.RemoteNodesAdapter
+import com.matiasilveiro.automastichome.main.ui.models.CentralNodeUI
+import com.matiasilveiro.automastichome.main.ui.models.RemoteNodeUI
 import com.matiasilveiro.automastichome.main.ui.navigatorstates.RemoteNodesListNavigatorStates
 import com.matiasilveiro.automastichome.main.ui.viewmodels.RemoteNodesListViewModel
 
@@ -37,8 +43,10 @@ class RemoteNodesListFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        
         viewModel.navigation.observe(viewLifecycleOwner, Observer { handleNavigation(it) })
         viewModel.viewState.observe(viewLifecycleOwner, Observer { handleViewStates(it) })
+        viewModel.nodes.observe(viewLifecycleOwner, Observer { setupRecyclerView(it) })
     }
 
     private fun handleNavigation(navigation: RemoteNodesListNavigatorStates) {
@@ -71,4 +79,14 @@ class RemoteNodesListFragment : Fragment() {
         }
     }
 
+    private fun setupRecyclerView(list: ArrayList<RemoteNodeUI>) {
+        val adapter = RemoteNodesAdapter()
+        adapter.setData(list)
+
+        with(binding.recyclerView) {
+            this.setHasFixedSize(true)
+            this.layoutManager = LinearLayoutManager(context)
+            this.adapter = adapter
+        }
+    }
 }

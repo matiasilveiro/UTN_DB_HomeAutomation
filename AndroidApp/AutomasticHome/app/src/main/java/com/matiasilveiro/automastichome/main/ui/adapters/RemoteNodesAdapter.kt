@@ -4,17 +4,17 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.matiasilveiro.automastichome.databinding.ItemRecyclerRemoteSensorBinding
-import com.matiasilveiro.automastichome.main.ui.models.RemoteSensorUI
+import com.matiasilveiro.automastichome.databinding.ItemRecyclerRemoteNodeBinding
+import com.matiasilveiro.automastichome.main.ui.models.RemoteNodeUI
 import kotlin.properties.Delegates
 
-class RemoteSensorsAdapter : RecyclerView.Adapter<RemoteSensorsAdapter.ViewHolder>() {
+class RemoteNodesAdapter : RecyclerView.Adapter<RemoteNodesAdapter.ViewHolder>() {
 
-    var items: List<RemoteSensorUI> by Delegates.observable(emptyList()) { _, _, _ -> notifyDataSetChanged() }
-    var onClickListener : ((RemoteSensorUI) -> Unit )? = null
+    var items: List<RemoteNodeUI> by Delegates.observable(emptyList()) { _, _, _ -> notifyDataSetChanged() }
+    var onClickListener : ((RemoteNodeUI) -> Unit )? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = ItemRecyclerRemoteSensorBinding.inflate(
+        val binding = ItemRecyclerRemoteNodeBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
             false
@@ -26,7 +26,7 @@ class RemoteSensorsAdapter : RecyclerView.Adapter<RemoteSensorsAdapter.ViewHolde
         holder.bind(items[position], onClickListener)
     }
 
-    fun setData(data: MutableList<RemoteSensorUI>){
+    fun setData(data: MutableList<RemoteNodeUI>){
         this.items = data
     }
 
@@ -35,9 +35,9 @@ class RemoteSensorsAdapter : RecyclerView.Adapter<RemoteSensorsAdapter.ViewHolde
     }
 
 
-    class ViewHolder(private val binding: ItemRecyclerRemoteSensorBinding) : RecyclerView.ViewHolder(binding.cardLayout) {
+    class ViewHolder(private val binding: ItemRecyclerRemoteNodeBinding) : RecyclerView.ViewHolder(binding.cardLayout) {
 
-        internal fun bind(value: RemoteSensorUI, listener: ((RemoteSensorUI) -> Unit)?) {
+        internal fun bind(value: RemoteNodeUI, listener: ((RemoteNodeUI) -> Unit)?) {
             binding.txtName.text = value.name
             Glide.with(binding.root)
                 .load(value.imageUrl)
