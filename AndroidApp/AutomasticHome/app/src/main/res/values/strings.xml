@@ -1,6 +1,14 @@
 <resources>
     <string name="app_name">Automastic Home</string>
 
+    <!-- Fragment titles - MainFeature -->
+    <string name="fragment_title_centralnodeslist">Mis lugares</string>
+    <string name="fragment_title_remotenodeslist">Mis dispositivos</string>
+    <string name="fragment_title_nodeactuator">Actuador</string>
+    <string name="fragment_title_nodesensor">Sensor</string>
+    <string name="fragment_title_remotenodeedit">Editar dispositivo</string>
+    <string name="fragment_title_centralnodeedit">Editar nodo central</string>
+
 
     <!-- SignInFragment layout strings -->
     <string name="fragment_signin_username">Usuario</string>
@@ -9,4 +17,9 @@
     <string name="fragment_signin_forgot_password">¿Olvido su contraseña?</string>
     <string name="fragment_signin_login_button">Ingresar</string>
     <string name="fragment_signin_signup_button">REGISTRARSE</string>
+
+
+    <!-- Error messages -->
+    <string name="msg_error_default">Error al procesar la solicitud</string>
+
 </resources>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_navgraph"
+    app:startDestination="@id/centralNodesListFragment">
+
+    <fragment
+        android:id="@+id/centralNodesListFragment"
+        android:name="com.matiasilveiro.automastichome.main.ui.fragments.CentralNodesListFragment"
+        android:label="@string/fragment_title_centralnodeslist"
+        tools:layout="@layout/fragment_central_nodes_list" >
+        <action
+            android:id="@+id/action_centralNodesListFragment_to_editCentralNodeFragment"
+            app:destination="@id/editCentralNodeFragment" />
+        <action
+            android:id="@+id/action_centralNodesListFragment_to_remoteNodesListFragment"
+            app:destination="@id/remoteNodesListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/remoteNodesListFragment"
+        android:name="com.matiasilveiro.automastichome.main.ui.fragments.RemoteNodesListFragment"
+        android:label="@string/fragment_title_remotenodeslist"
+        tools:layout="@layout/fragment_remote_nodes_list" >
+        <action
+            android:id="@+id/action_remoteNodesListFragment_to_nodeActuatorFragment"
+            app:destination="@id/nodeActuatorFragment" />
+        <action
+            android:id="@+id/action_remoteNodesListFragment_to_nodeSensorFragment"
+            app:destination="@id/nodeSensorFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/nodeSensorFragment"
+        android:name="com.matiasilveiro.automastichome.main.ui.fragments.NodeSensorFragment"
+        android:label="@string/fragment_title_nodesensor"
+        tools:layout="@layout/fragment_node_sensor" >
+        <action
+            android:id="@+id/action_nodeSensorFragment_to_editRemoteNodeFragment"
+            app:destination="@id/editRemoteNodeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/nodeActuatorFragment"
+        android:name="com.matiasilveiro.automastichome.main.ui.fragments.NodeActuatorFragment"
+        android:label="@string/fragment_title_nodeactuator"
+        tools:layout="@layout/fragment_node_actuator" >
+        <action
+            android:id="@+id/action_nodeActuatorFragment_to_editRemoteNodeFragment"
+            app:destination="@id/editRemoteNodeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editCentralNodeFragment"
+        android:name="com.matiasilveiro.automastichome.main.ui.fragments.EditCentralNodeFragment"
+        android:label="@string/fragment_title_centralnodeedit"
+        tools:layout="@layout/fragment_edit_central_node" />
+    <fragment
+        android:id="@+id/editRemoteNodeFragment"
+        android:name="com.matiasilveiro.automastichome.main.ui.fragments.EditRemoteNodeFragment"
+        android:label="@string/fragment_title_remotenodeedit"
+        tools:layout="@layout/fragment_edit_remote_node" />
+</navigation>
