@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "462853315189",
+    "firebase_url": "https://automastichome.firebaseio.com",
+    "project_id": "automastichome",
+    "storage_bucket": "automastichome.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:462853315189:android:97648b0b26f1e0a88b763c",
+        "android_client_info": {
+          "package_name": "com.matiasilveiro.automastichome"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "462853315189-gutuiv1vg6d41fa9defu6pufnaa531k7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDXwbCNbC43Fw9r-Mez402eFG3rp0smouk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "462853315189-gutuiv1vg6d41fa9defu6pufnaa531k7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

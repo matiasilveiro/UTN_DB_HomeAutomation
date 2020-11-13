@@ -16,7 +16,9 @@ import com.matiasilveiro.automastichome.core.utils.snack
 import com.matiasilveiro.automastichome.databinding.FragmentEditCentralNodeBinding
 import com.matiasilveiro.automastichome.main.ui.navigatorstates.EditCentralNodeNavigatorStates
 import com.matiasilveiro.automastichome.main.ui.viewmodels.EditCentralNodeViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class EditCentralNodeFragment : Fragment() {
 
     companion object {

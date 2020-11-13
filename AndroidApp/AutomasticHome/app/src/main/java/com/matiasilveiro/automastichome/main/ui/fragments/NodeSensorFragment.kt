@@ -16,7 +16,9 @@ import com.matiasilveiro.automastichome.core.utils.snack
 import com.matiasilveiro.automastichome.databinding.FragmentNodeSensorBinding
 import com.matiasilveiro.automastichome.main.ui.navigatorstates.NodeSensorNavigatorStates
 import com.matiasilveiro.automastichome.main.ui.viewmodels.NodeSensorViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class NodeSensorFragment : Fragment() {
 
     companion object {

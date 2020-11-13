@@ -1,6 +1,5 @@
 package com.matiasilveiro.automastichome.login.ui.fragments
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -9,12 +8,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import com.matiasilveiro.automastichome.R
 import com.matiasilveiro.automastichome.core.utils.exhaustive
 import com.matiasilveiro.automastichome.databinding.FragmentSignUpBinding
 import com.matiasilveiro.automastichome.login.ui.navigatorstates.SignUpNavigatorStates
 import com.matiasilveiro.automastichome.login.ui.viewmodels.SignUpViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SignUpFragment : Fragment() {
 
     companion object {

@@ -18,7 +18,9 @@ import com.matiasilveiro.automastichome.core.utils.snack
 import com.matiasilveiro.automastichome.databinding.FragmentSignInBinding
 import com.matiasilveiro.automastichome.login.ui.navigatorstates.SignInNavigatorStates
 import com.matiasilveiro.automastichome.login.ui.viewmodels.SignInViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SignInFragment : Fragment() {
 
     companion object {
@@ -36,8 +38,8 @@ class SignInFragment : Fragment() {
     ): View? {
         _binding = FragmentSignInBinding.inflate(inflater, container, false)
 
-        binding.edtUsername.editText?.setText("tecontacto.developer@gmail.com")
-        binding.edtPassword.editText?.setText("apptecontacto2020")
+        binding.edtUsername.editText?.setText("matias.silveiro@gmail.com")
+        binding.edtPassword.editText?.setText("proyectodb2020")
 
         binding.btnSignIn.setOnClickListener {
             signInCallback()

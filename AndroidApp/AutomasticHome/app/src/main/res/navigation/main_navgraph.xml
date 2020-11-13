@@ -28,6 +28,9 @@
         <action
             android:id="@+id/action_remoteNodesListFragment_to_nodeSensorFragment"
             app:destination="@id/nodeSensorFragment" />
+        <argument
+            android:name="centralNode"
+            app:argType="com.matiasilveiro.automastichome.main.ui.models.CentralNodeUI" />
     </fragment>
     <fragment
         android:id="@+id/nodeSensorFragment"
@@ -51,7 +54,12 @@
         android:id="@+id/editCentralNodeFragment"
         android:name="com.matiasilveiro.automastichome.main.ui.fragments.EditCentralNodeFragment"
         android:label="@string/fragment_title_centralnodeedit"
-        tools:layout="@layout/fragment_edit_central_node" />
+        tools:layout="@layout/fragment_edit_central_node" >
+        <argument
+            android:name="centralNode"
+            app:argType="com.matiasilveiro.automastichome.main.ui.models.CentralNodeUI"
+            app:nullable="true" />
+    </fragment>
     <fragment
         android:id="@+id/editRemoteNodeFragment"
         android:name="com.matiasilveiro.automastichome.main.ui.fragments.EditRemoteNodeFragment"

@@ -22,7 +22,9 @@ import com.matiasilveiro.automastichome.main.ui.models.CentralNodeUI
 import com.matiasilveiro.automastichome.main.ui.models.RemoteNodeUI
 import com.matiasilveiro.automastichome.main.ui.navigatorstates.RemoteNodesListNavigatorStates
 import com.matiasilveiro.automastichome.main.ui.viewmodels.RemoteNodesListViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class RemoteNodesListFragment : Fragment() {
 
     companion object {

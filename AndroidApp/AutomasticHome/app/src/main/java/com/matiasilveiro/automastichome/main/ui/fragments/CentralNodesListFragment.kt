@@ -19,7 +19,9 @@ import com.matiasilveiro.automastichome.main.ui.adapters.CentralNodesAdapter
 import com.matiasilveiro.automastichome.main.ui.models.CentralNodeUI
 import com.matiasilveiro.automastichome.main.ui.navigatorstates.CentralNodesListNavigatorStates
 import com.matiasilveiro.automastichome.main.ui.viewmodels.CentralNodesListViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class CentralNodesListFragment : Fragment() {
 
     companion object {
@@ -48,6 +50,14 @@ class CentralNodesListFragment : Fragment() {
 
     private fun handleNavigation(navigation: CentralNodesListNavigatorStates) {
         when(navigation) {
+            is CentralNodesListNavigatorStates.ToRemoteNodesList -> {
+                val action = CentralNodesListFragmentDirections.actionCentralNodesListFragmentToRemoteNodesListFragment(navigation.centralNode)
+                findNavController().navigate(action)
+            }
+            is CentralNodesListNavigatorStates.ToEditCentralNode -> {
+                val action = CentralNodesListFragmentDirections.actionCentralNodesListFragmentToEditCentralNodeFragment(navigation.centralNode)
+                findNavController().navigate(action)
+            }
             is CentralNodesListNavigatorStates.GoBack -> {
                 findNavController().navigateUp()
             }
@@ -79,6 +89,9 @@ class CentralNodesListFragment : Fragment() {
     private fun setupRecyclerView(list: ArrayList<CentralNodeUI>) {
         val adapter = CentralNodesAdapter()
         adapter.setData(list)
+        adapter.onClickListener = {
+            viewModel.goToRemoteNodesList(it)
+        }
 
         with(binding.recyclerView) {
             this.setHasFixedSize(true)

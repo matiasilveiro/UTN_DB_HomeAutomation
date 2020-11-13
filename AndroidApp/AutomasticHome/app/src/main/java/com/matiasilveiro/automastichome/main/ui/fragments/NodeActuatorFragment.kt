@@ -16,7 +16,9 @@ import com.matiasilveiro.automastichome.core.utils.snack
 import com.matiasilveiro.automastichome.databinding.FragmentNodeActuatorBinding
 import com.matiasilveiro.automastichome.main.ui.navigatorstates.NodeActuatorNavigatorStates
 import com.matiasilveiro.automastichome.main.ui.viewmodels.NodeActuatorViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class NodeActuatorFragment : Fragment() {
 
     companion object {

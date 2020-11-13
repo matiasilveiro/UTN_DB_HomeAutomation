@@ -16,7 +16,9 @@ import com.matiasilveiro.automastichome.core.utils.snack
 import com.matiasilveiro.automastichome.databinding.FragmentEditRemoteNodeBinding
 import com.matiasilveiro.automastichome.main.ui.navigatorstates.EditRemoteNodeNavigatorStates
 import com.matiasilveiro.automastichome.main.ui.viewmodels.EditRemoteNodeViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class EditRemoteNodeFragment : Fragment() {
 
     companion object {
