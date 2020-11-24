@@ -5,13 +5,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.matiasilveiro.automastichome.databinding.ItemRecyclerRemoteNodeBinding
-import com.matiasilveiro.automastichome.main.ui.models.RemoteNodeUI
+import com.matiasilveiro.automastichome.main.domain.RemoteSensor
 import kotlin.properties.Delegates
 
-class RemoteNodesAdapter : RecyclerView.Adapter<RemoteNodesAdapter.ViewHolder>() {
+class RemoteSensorsAdapter : RecyclerView.Adapter<RemoteSensorsAdapter.ViewHolder>() {
 
-    var items: List<RemoteNodeUI> by Delegates.observable(emptyList()) { _, _, _ -> notifyDataSetChanged() }
-    var onClickListener : ((RemoteNodeUI) -> Unit )? = null
+    var items: List<RemoteSensor> by Delegates.observable(emptyList()) { _, _, _ -> notifyDataSetChanged() }
+    var onClickListener : ((RemoteSensor) -> Unit )? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ItemRecyclerRemoteNodeBinding.inflate(
@@ -26,7 +26,7 @@ class RemoteNodesAdapter : RecyclerView.Adapter<RemoteNodesAdapter.ViewHolder>()
         holder.bind(items[position], onClickListener)
     }
 
-    fun setData(data: MutableList<RemoteNodeUI>){
+    fun setData(data: MutableList<RemoteSensor>){
         this.items = data
     }
 
@@ -37,7 +37,7 @@ class RemoteNodesAdapter : RecyclerView.Adapter<RemoteNodesAdapter.ViewHolder>()
 
     class ViewHolder(private val binding: ItemRecyclerRemoteNodeBinding) : RecyclerView.ViewHolder(binding.cardLayout) {
 
-        internal fun bind(value: RemoteNodeUI, listener: ((RemoteNodeUI) -> Unit)?) {
+        internal fun bind(value: RemoteSensor, listener: ((RemoteSensor) -> Unit)?) {
             binding.txtName.text = value.name
             Glide.with(binding.root)
                 .load(value.imageUrl)

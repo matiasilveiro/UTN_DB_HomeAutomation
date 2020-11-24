@@ -4,17 +4,17 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.matiasilveiro.automastichome.databinding.ItemRecyclerCentralNodeBinding
-import com.matiasilveiro.automastichome.main.domain.CentralNode
+import com.matiasilveiro.automastichome.databinding.ItemRecyclerRemoteNodeBinding
+import com.matiasilveiro.automastichome.main.domain.RemoteActuator
 import kotlin.properties.Delegates
 
-class CentralNodesAdapter : RecyclerView.Adapter<CentralNodesAdapter.ViewHolder>() {
+class RemoteActuatorsAdapter : RecyclerView.Adapter<RemoteActuatorsAdapter.ViewHolder>() {
 
-    var items: List<CentralNode> by Delegates.observable(emptyList()) { _, _, _ -> notifyDataSetChanged() }
-    var onClickListener : ((CentralNode) -> Unit )? = null
+    var items: List<RemoteActuator> by Delegates.observable(emptyList()) { _, _, _ -> notifyDataSetChanged() }
+    var onClickListener : ((RemoteActuator) -> Unit )? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = ItemRecyclerCentralNodeBinding.inflate(
+        val binding = ItemRecyclerRemoteNodeBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
             false
@@ -26,7 +26,7 @@ class CentralNodesAdapter : RecyclerView.Adapter<CentralNodesAdapter.ViewHolder>
         holder.bind(items[position], onClickListener)
     }
 
-    fun setData(data: MutableList<CentralNode>){
+    fun setData(data: MutableList<RemoteActuator>){
         this.items = data
     }
 
@@ -35,10 +35,10 @@ class CentralNodesAdapter : RecyclerView.Adapter<CentralNodesAdapter.ViewHolder>
     }
 
 
-    class ViewHolder(private val binding: ItemRecyclerCentralNodeBinding) : RecyclerView.ViewHolder(binding.cardLayout) {
+    class ViewHolder(private val binding: ItemRecyclerRemoteNodeBinding) : RecyclerView.ViewHolder(binding.cardLayout) {
 
-        internal fun bind(value: CentralNode, listener: ((CentralNode) -> Unit)?) {
-            binding.textView.text = value.name
+        internal fun bind(value: RemoteActuator, listener: ((RemoteActuator) -> Unit)?) {
+            binding.txtName.text = value.name
             Glide.with(binding.root)
                 .load(value.imageUrl)
                 .centerCrop()

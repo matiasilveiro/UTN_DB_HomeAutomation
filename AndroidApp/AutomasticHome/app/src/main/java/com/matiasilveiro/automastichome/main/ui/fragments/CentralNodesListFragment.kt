@@ -15,8 +15,8 @@ import com.matiasilveiro.automastichome.core.ui.BaseViewState
 import com.matiasilveiro.automastichome.core.utils.exhaustive
 import com.matiasilveiro.automastichome.core.utils.snack
 import com.matiasilveiro.automastichome.databinding.FragmentCentralNodesListBinding
+import com.matiasilveiro.automastichome.main.domain.CentralNode
 import com.matiasilveiro.automastichome.main.ui.adapters.CentralNodesAdapter
-import com.matiasilveiro.automastichome.main.ui.models.CentralNodeUI
 import com.matiasilveiro.automastichome.main.ui.navigatorstates.CentralNodesListNavigatorStates
 import com.matiasilveiro.automastichome.main.ui.viewmodels.CentralNodesListViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -86,7 +86,7 @@ class CentralNodesListFragment : Fragment() {
         }
     }
 
-    private fun setupRecyclerView(list: ArrayList<CentralNodeUI>) {
+    private fun setupRecyclerView(list: ArrayList<CentralNode>) {
         val adapter = CentralNodesAdapter()
         adapter.setData(list)
         adapter.onClickListener = {

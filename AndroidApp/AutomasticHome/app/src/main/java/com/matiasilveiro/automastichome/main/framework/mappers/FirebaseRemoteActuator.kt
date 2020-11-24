@@ -7,13 +7,14 @@ class FirebaseRemoteActuator(
         val centralUid: String,
         val name: String,
         val address: String,
+        val imageUrl: String,
         val status: String,
         val type: String,
         val value: Int)
     : FirebaseRemoteNode(uid,centralUid,name,address,status)
 {
-    constructor() : this("","","","","","",0)
+    constructor() : this("","","","","","","",0)
 }
 
-fun FirebaseRemoteActuator.toRemoteActuator(): RemoteActuator = RemoteActuator(uid,centralUid,name,address,status,type,value)
-fun RemoteActuator.toFirebaseRemoteActuator(): FirebaseRemoteActuator = FirebaseRemoteActuator(uid,centralUid,name,address,status,type,value)
+fun FirebaseRemoteActuator.toRemoteActuator(): RemoteActuator = RemoteActuator(uid,centralUid,name,address,imageUrl,status,type,value)
+fun RemoteActuator.toFirebaseRemoteActuator(): FirebaseRemoteActuator = FirebaseRemoteActuator(uid,centralUid,name,address,imageUrl,status,type,value)
