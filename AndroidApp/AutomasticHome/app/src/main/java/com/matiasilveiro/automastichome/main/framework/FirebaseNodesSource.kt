@@ -34,10 +34,12 @@ class FirebaseNodesSource @Inject constructor(
                     Log.d("FirebaseNodesSource", "Role retrieved with uid ${document.id}")
                     val role = document.toObject<FirebaseNodeUserRole>()
 
-                    val node = db.collection(CENTRAL_NODES).document(role.centralUid).get().await()
-                    Log.d("FirebaseNodesSource", "Central node retrieved with uid ${node.id}")
-                    node.toObject<FirebaseCentralNode>()?.let {
-                        nodesList.add(it.toCentralNode())
+                    val dbNode = db.collection(CENTRAL_NODES).document(role.centralUid).get().await()
+                    Log.d("FirebaseNodesSource", "Central node retrieved with uid ${dbNode.id}")
+                    dbNode.toObject<FirebaseCentralNode>()?.let {
+                        val node = it.toCentralNode()
+                        node.role = role.role
+                        nodesList.add(node)
                     }
                 }
                 return MyResult.Success(ArrayList(nodesList))

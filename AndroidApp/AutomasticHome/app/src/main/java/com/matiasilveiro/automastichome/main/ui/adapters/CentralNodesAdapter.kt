@@ -1,6 +1,7 @@
 package com.matiasilveiro.automastichome.main.ui.adapters
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -60,6 +61,11 @@ class CentralNodesAdapter : RecyclerView.Adapter<CentralNodesAdapter.ViewHolder>
             }
             binding.btnDelete.setOnClickListener {
                 onDeleteListener?.invoke(value)
+            }
+
+            if(value.role != 0) {
+                binding.btnEdit.visibility = View.GONE
+                binding.btnDelete.visibility = View.GONE
             }
         }
     }
