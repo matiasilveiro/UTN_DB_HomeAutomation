@@ -21,16 +21,16 @@ class CentralNodesListViewModel : ViewModel() {
 
     init {
         val nodesList = arrayListOf<CentralNode>()
-        nodesList.add(CentralNode("","Mi casa","","","https://images.pexels.com/photos/276724/pexels-photo-276724.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"))
-        nodesList.add(CentralNode("","Mi oficina","","","https://images.pexels.com/photos/1170412/pexels-photo-1170412.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"))
-        nodesList.add(CentralNode("","Mi habitacion","","","https://images.pexels.com/photos/1267438/pexels-photo-1267438.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"))
-        nodesList.add(CentralNode("","Nodo 4","","",""))
+        nodesList.add(CentralNode("","Mi casa","","","https://images.pexels.com/photos/276724/pexels-photo-276724.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",0))
+        nodesList.add(CentralNode("","Mi oficina","","","https://images.pexels.com/photos/1170412/pexels-photo-1170412.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",0))
+        nodesList.add(CentralNode("","Mi habitacion","","","https://images.pexels.com/photos/1267438/pexels-photo-1267438.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",0))
+        nodesList.add(CentralNode("","Nodo 4","","","",0))
 
         _nodes.value = nodesList
     }
 
-    fun goToRemoteNodesList(centralNodeUI: CentralNode) {
-        _navigation.value = CentralNodesListNavigatorStates.ToRemoteNodesList(centralNodeUI)
+    fun goToRemoteNodesList(centralNode: CentralNode) {
+        _navigation.value = CentralNodesListNavigatorStates.ToRemoteNodesList(centralNode)
     }
 
     fun goBack() {

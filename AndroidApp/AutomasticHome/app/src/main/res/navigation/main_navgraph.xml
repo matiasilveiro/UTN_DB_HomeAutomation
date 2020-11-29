@@ -22,33 +22,29 @@
         android:name="com.matiasilveiro.automastichome.main.ui.fragments.RemoteNodesListFragment"
         android:label="@string/fragment_title_remotenodeslist"
         tools:layout="@layout/fragment_remote_nodes_list" >
-        <action
-            android:id="@+id/action_remoteNodesListFragment_to_nodeActuatorFragment"
-            app:destination="@id/nodeActuatorFragment" />
-        <action
-            android:id="@+id/action_remoteNodesListFragment_to_nodeSensorFragment"
-            app:destination="@id/nodeSensorFragment" />
         <argument
             android:name="centralNode"
-            app:argType="com.matiasilveiro.automastichome.main.ui.models.CentralNodeUI" />
+            app:argType="com.matiasilveiro.automastichome.main.domain.CentralNode" />
     </fragment>
     <fragment
         android:id="@+id/nodeSensorFragment"
         android:name="com.matiasilveiro.automastichome.main.ui.fragments.NodeSensorFragment"
         android:label="@string/fragment_title_nodesensor"
         tools:layout="@layout/fragment_node_sensor" >
-        <action
-            android:id="@+id/action_nodeSensorFragment_to_editRemoteNodeFragment"
-            app:destination="@id/editRemoteNodeFragment" />
+        <argument
+            android:name="node"
+            app:argType="com.matiasilveiro.automastichome.main.domain.RemoteSensor"
+            app:nullable="true" />
     </fragment>
     <fragment
         android:id="@+id/nodeActuatorFragment"
         android:name="com.matiasilveiro.automastichome.main.ui.fragments.NodeActuatorFragment"
         android:label="@string/fragment_title_nodeactuator"
         tools:layout="@layout/fragment_node_actuator" >
-        <action
-            android:id="@+id/action_nodeActuatorFragment_to_editRemoteNodeFragment"
-            app:destination="@id/editRemoteNodeFragment" />
+        <argument
+            android:name="node"
+            app:argType="com.matiasilveiro.automastichome.main.domain.RemoteActuator"
+            app:nullable="true" />
     </fragment>
     <fragment
         android:id="@+id/editCentralNodeFragment"
@@ -57,12 +53,15 @@
         tools:layout="@layout/fragment_edit_central_node" >
         <argument
             android:name="centralNode"
-            app:argType="com.matiasilveiro.automastichome.main.ui.models.CentralNodeUI"
+            app:argType="com.matiasilveiro.automastichome.main.domain.CentralNode"
             app:nullable="true" />
     </fragment>
     <fragment
-        android:id="@+id/editRemoteNodeFragment"
-        android:name="com.matiasilveiro.automastichome.main.ui.fragments.EditRemoteNodeFragment"
-        android:label="@string/fragment_title_remotenodeedit"
-        tools:layout="@layout/fragment_edit_remote_node" />
+        android:id="@+id/remoteActuatorsListFragment"
+        android:name="com.matiasilveiro.automastichome.main.ui.fragments.RemoteActuatorsListFragment"
+        android:label="RemoteActuatorsListFragment" >
+        <action
+            android:id="@+id/action_remoteActuatorsListFragment_to_nodeActuatorFragment"
+            app:destination="@id/nodeActuatorFragment" />
+    </fragment>
 </navigation>

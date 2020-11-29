@@ -1,6 +1,7 @@
 package com.matiasilveiro.automastichome.main.ui.fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -8,30 +9,32 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.matiasilveiro.automastichome.R
 import com.matiasilveiro.automastichome.core.ui.BaseViewState
 import com.matiasilveiro.automastichome.core.utils.exhaustive
 import com.matiasilveiro.automastichome.core.utils.snack
-import com.matiasilveiro.automastichome.databinding.FragmentEditRemoteNodeBinding
-import com.matiasilveiro.automastichome.main.ui.navigatorstates.EditRemoteNodeNavigatorStates
-import com.matiasilveiro.automastichome.main.ui.viewmodels.EditRemoteNodeViewModel
-import dagger.hilt.android.AndroidEntryPoint
+import com.matiasilveiro.automastichome.databinding.FragmentRemoteActuatorsListBinding
+import com.matiasilveiro.automastichome.main.domain.RemoteActuator
+import com.matiasilveiro.automastichome.main.ui.adapters.RemoteActuatorsAdapter
+import com.matiasilveiro.automastichome.main.ui.navigatorstates.RemoteActuatorsListNavigatorStates
+import com.matiasilveiro.automastichome.main.ui.viewmodels.RemoteActuatorsListViewModel
 
-@AndroidEntryPoint
-class EditRemoteNodeFragment : Fragment() {
+class RemoteActuatorsListFragment : Fragment() {
 
     companion object {
-        fun newInstance() = EditRemoteNodeFragment()
+        fun newInstance() = RemoteActuatorsListFragment()
+        const val TAG = "RemoteActuatorsListFragment"
     }
 
-    private val viewModel: EditRemoteNodeViewModel by activityViewModels()
-    private var _binding: FragmentEditRemoteNodeBinding? = null
+    private val viewModel: RemoteActuatorsListViewModel by activityViewModels()
+    private var _binding: FragmentRemoteActuatorsListBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        _binding = FragmentEditRemoteNodeBinding.inflate(layoutInflater)
+        _binding = FragmentRemoteActuatorsListBinding.inflate(layoutInflater)
         setHasOptionsMenu(true)
 
         return binding.root
@@ -39,13 +42,15 @@ class EditRemoteNodeFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
         viewModel.navigation.observe(viewLifecycleOwner, Observer { handleNavigation(it) })
         viewModel.viewState.observe(viewLifecycleOwner, Observer { handleViewStates(it) })
+        viewModel.nodes.observe(viewLifecycleOwner, Observer { setupRecyclerView(it) })
     }
 
-    private fun handleNavigation(navigation: EditRemoteNodeNavigatorStates) {
+    private fun handleNavigation(navigation: RemoteActuatorsListNavigatorStates) {
         when(navigation) {
-            is EditRemoteNodeNavigatorStates.GoBack -> {
+            is RemoteActuatorsListNavigatorStates.GoBack -> {
                 findNavController().navigateUp()
             }
         }.exhaustive
@@ -71,6 +76,30 @@ class EditRemoteNodeFragment : Fragment() {
             //binding.grayblur.visibility = View.VISIBLE
             //binding.progressLoader.visibility = View.VISIBLE
         }
+    }
+
+    private fun setupRecyclerView(list: ArrayList<RemoteActuator>) {
+        val adapter = RemoteActuatorsAdapter()
+        adapter.setData(list)
+
+        adapter.onClickListener = { onNodeClicked(it) }
+        adapter.onSwitchListener = { node, state ->
+            onNodeSwitchToggled(node, state)
+        }
+
+        with(binding.recyclerView) {
+            this.setHasFixedSize(true)
+            this.layoutManager = LinearLayoutManager(context)
+            this.adapter = adapter
+        }
+    }
+
+    private fun onNodeClicked(node: RemoteActuator) {
+        Log.d(TAG, "Node clicked: ${node.name}")
+    }
+
+    private fun onNodeSwitchToggled(node: RemoteActuator, state: Boolean) {
+        Log.d(TAG, "Node switch: ${node.name} - State: $state")
     }
 
 }

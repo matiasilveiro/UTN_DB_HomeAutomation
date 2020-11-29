@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <dimen name="profile_image_size">64dp</dimen>
+    <dimen name="profile_image_radius">32dp</dimen>
+
+    <dimen name="profile_image_size_big">120dp</dimen>
+    <dimen name="profile_image_radius_big">60dp</dimen>
+
+    <dimen name="cardview_corner_radius">16dp</dimen>
+    <dimen name="cardviewsuggestion_corner_radius">10dp</dimen>
+    <dimen name="cardviewcategories_corner_radius">5dp</dimen>
+    <dimen name="cardviewcategories_image_radius">10dp</dimen>
+
+    <dimen name="splash_logo_max_width">200dp</dimen>
+</resources>

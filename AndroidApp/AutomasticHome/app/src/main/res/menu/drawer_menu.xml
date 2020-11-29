@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/categoriesFragment"
+        android:icon="@drawable/ic_launcher_background"
+        android:title="TODO 1" />
+    <item
+        android:id="@+id/signUpNewFragment"
+        android:icon="@drawable/ic_launcher_background"
+        android:title="TODO 2" />
+    <item
+        android:id="@+id/shareFragment"
+        android:icon="@drawable/ic_launcher_background"
+        android:title="TODO 3" />
+    <item
+        android:id="@+id/aboutUsFragment"
+        android:icon="@drawable/ic_launcher_background"
+        android:title="TODO 4" />
+</menu>

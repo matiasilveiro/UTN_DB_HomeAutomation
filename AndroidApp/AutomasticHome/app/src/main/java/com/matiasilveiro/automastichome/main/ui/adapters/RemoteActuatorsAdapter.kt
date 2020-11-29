@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.matiasilveiro.automastichome.databinding.ItemRecyclerRemoteActuatorBinding
 import com.matiasilveiro.automastichome.databinding.ItemRecyclerRemoteNodeBinding
 import com.matiasilveiro.automastichome.main.domain.RemoteActuator
 import kotlin.properties.Delegates
@@ -12,9 +13,10 @@ class RemoteActuatorsAdapter : RecyclerView.Adapter<RemoteActuatorsAdapter.ViewH
 
     var items: List<RemoteActuator> by Delegates.observable(emptyList()) { _, _, _ -> notifyDataSetChanged() }
     var onClickListener : ((RemoteActuator) -> Unit )? = null
+    var onSwitchListener : ((RemoteActuator, Boolean) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = ItemRecyclerRemoteNodeBinding.inflate(
+        val binding = ItemRecyclerRemoteActuatorBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
             false
@@ -23,11 +25,11 @@ class RemoteActuatorsAdapter : RecyclerView.Adapter<RemoteActuatorsAdapter.ViewH
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(items[position], onClickListener)
+        holder.bind(items[position], onClickListener, onSwitchListener)
     }
 
-    fun setData(data: MutableList<RemoteActuator>){
-        this.items = data
+    fun setData(data: ArrayList<RemoteActuator>){
+        this.items = data.toList()
     }
 
     override fun getItemCount(): Int {
@@ -35,9 +37,9 @@ class RemoteActuatorsAdapter : RecyclerView.Adapter<RemoteActuatorsAdapter.ViewH
     }
 
 
-    class ViewHolder(private val binding: ItemRecyclerRemoteNodeBinding) : RecyclerView.ViewHolder(binding.cardLayout) {
+    class ViewHolder(private val binding: ItemRecyclerRemoteActuatorBinding) : RecyclerView.ViewHolder(binding.cardLayout) {
 
-        internal fun bind(value: RemoteActuator, listener: ((RemoteActuator) -> Unit)?) {
+        internal fun bind(value: RemoteActuator, clickListener: ((RemoteActuator) -> Unit)?, switchListener: ((RemoteActuator, Boolean) -> Unit)?) {
             binding.txtName.text = value.name
             Glide.with(binding.root)
                 .load(value.imageUrl)
@@ -45,7 +47,10 @@ class RemoteActuatorsAdapter : RecyclerView.Adapter<RemoteActuatorsAdapter.ViewH
                 .into(binding.imageView)
 
             binding.cardLayout.setOnClickListener {
-                listener?.invoke(value)
+                clickListener?.invoke(value)
+            }
+            binding.switcher.setOnCheckedChangeListener { state ->
+                switchListener?.invoke(value, state)
             }
         }
     }

@@ -1,9 +1,9 @@
 package com.matiasilveiro.automastichome.main.ui.navigatorstates
 
-import com.matiasilveiro.automastichome.main.ui.models.CentralNodeUI
+import com.matiasilveiro.automastichome.main.domain.CentralNode
 
 sealed class CentralNodesListNavigatorStates {
-    data class ToRemoteNodesList(val centralNode: CentralNodeUI): CentralNodesListNavigatorStates()
-    data class ToEditCentralNode(val centralNode: CentralNodeUI): CentralNodesListNavigatorStates()
+    data class ToRemoteNodesList(val centralNode: CentralNode): CentralNodesListNavigatorStates()
+    data class ToEditCentralNode(val centralNode: CentralNode): CentralNodesListNavigatorStates()
     object GoBack: CentralNodesListNavigatorStates()
 }

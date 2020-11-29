@@ -5,18 +5,21 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.tabs.TabLayoutMediator
 import com.matiasilveiro.automastichome.R
 import com.matiasilveiro.automastichome.core.ui.BaseViewState
 import com.matiasilveiro.automastichome.core.utils.exhaustive
 import com.matiasilveiro.automastichome.core.utils.snack
 import com.matiasilveiro.automastichome.databinding.FragmentRemoteNodesListBinding
+import com.matiasilveiro.automastichome.main.domain.RemoteNode
 import com.matiasilveiro.automastichome.main.ui.adapters.RemoteActuatorsAdapter
-import com.matiasilveiro.automastichome.main.ui.models.RemoteNodeUI
 import com.matiasilveiro.automastichome.main.ui.navigatorstates.RemoteNodesListNavigatorStates
 import com.matiasilveiro.automastichome.main.ui.viewmodels.RemoteNodesListViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -40,12 +43,25 @@ class RemoteNodesListFragment : Fragment() {
         return binding.root
     }
 
+    override fun onStart() {
+        super.onStart()
+
+        binding.viewPager.adapter = createCardAdapter()
+        TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
+            when (position) {
+                0 -> tab.text = "Actuadores"
+                1 -> tab.text = "Sensores"
+                else -> tab.text = "undefined"
+            }
+        }.attach()
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         
         viewModel.navigation.observe(viewLifecycleOwner, Observer { handleNavigation(it) })
         viewModel.viewState.observe(viewLifecycleOwner, Observer { handleViewStates(it) })
-        viewModel.nodes.observe(viewLifecycleOwner, Observer { setupRecyclerView(it) })
+        //viewModel.nodes.observe(viewLifecycleOwner, Observer { setupRecyclerView(it) })
     }
 
     private fun handleNavigation(navigation: RemoteNodesListNavigatorStates) {
@@ -78,7 +94,8 @@ class RemoteNodesListFragment : Fragment() {
         }
     }
 
-    private fun setupRecyclerView(list: ArrayList<RemoteNodeUI>) {
+    /*
+    private fun setupRecyclerView(list: ArrayList<RemoteNode>) {
         val adapter = RemoteActuatorsAdapter()
         adapter.setData(list)
 
@@ -86,6 +103,31 @@ class RemoteNodesListFragment : Fragment() {
             this.setHasFixedSize(true)
             this.layoutManager = LinearLayoutManager(context)
             this.adapter = adapter
+        }
+    }
+     */
+
+    private fun createCardAdapter(): ViewPagerAdapter? {
+        return ViewPagerAdapter(requireActivity())
+    }
+
+    class ViewPagerAdapter(fragmentActivity: FragmentActivity) : FragmentStateAdapter(fragmentActivity) {
+        override fun createFragment(position: Int): Fragment {
+
+            return when(position){
+                0 -> RemoteActuatorsListFragment()
+                1 -> RemoteSensorsListFragment()
+
+                else -> RemoteActuatorsListFragment()
+            }
+        }
+
+        override fun getItemCount(): Int {
+            return TAB_COUNT
+        }
+
+        companion object {
+            private const val TAB_COUNT = 2
         }
     }
 }
