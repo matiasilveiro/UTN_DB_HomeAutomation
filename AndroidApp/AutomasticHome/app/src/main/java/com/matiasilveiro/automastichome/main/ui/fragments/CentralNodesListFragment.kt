@@ -20,6 +20,7 @@ import com.matiasilveiro.automastichome.main.domain.CentralNode
 import com.matiasilveiro.automastichome.main.ui.adapters.CentralNodesAdapter
 import com.matiasilveiro.automastichome.main.ui.navigatorstates.CentralNodesListNavigatorStates
 import com.matiasilveiro.automastichome.main.ui.viewmodels.CentralNodesListViewModel
+import com.matiasilveiro.automastichome.main.ui.viewstates.DataViewState
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -65,11 +66,14 @@ class CentralNodesListFragment : Fragment() {
         }.exhaustive
     }
 
-    private fun handleViewStates(state: BaseViewState) {
+    private fun handleViewStates(state: DataViewState) {
         when(state) {
-            is BaseViewState.Ready -> { enableUI(true) }
-            is BaseViewState.Loading -> { enableUI(false) }
-            is BaseViewState.Failure -> { showMessage(getString(R.string.msg_error_default)) }
+            is DataViewState.Ready -> { enableUI(true) }
+            is DataViewState.Refreshing -> { enableUI(true) }
+            is DataViewState.Loading -> { enableUI(false) }
+            is DataViewState.Failure -> {
+                enableUI(true)
+                showMessage(getString(R.string.msg_error_default)) }
         }.exhaustive
     }
 
@@ -92,6 +96,9 @@ class CentralNodesListFragment : Fragment() {
         adapter.setData(list)
         adapter.onClickListener = {
             viewModel.goToRemoteNodesList(it)
+        }
+        adapter.onEditListener = {
+            viewModel.goToEditCentralNode(it)
         }
 
         with(binding.recyclerView) {

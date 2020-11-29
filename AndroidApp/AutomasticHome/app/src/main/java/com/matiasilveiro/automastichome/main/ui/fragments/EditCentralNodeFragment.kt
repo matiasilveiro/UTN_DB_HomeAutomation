@@ -1,13 +1,15 @@
 package com.matiasilveiro.automastichome.main.ui.fragments
 
 import android.os.Bundle
+import android.view.*
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
+import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import com.matiasilveiro.automastichome.R
 import com.matiasilveiro.automastichome.core.ui.BaseViewState
@@ -29,12 +31,47 @@ class EditCentralNodeFragment : Fragment() {
     private var _binding: FragmentEditCentralNodeBinding? = null
     private val binding get() = _binding!!
 
+    private val args: EditCentralNodeFragmentArgs by navArgs()
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         _binding = FragmentEditCentralNodeBinding.inflate(layoutInflater)
         setHasOptionsMenu(true)
 
+        args.centralNode?.let {
+            binding.textView.text = it.name
+            binding.edtName.editText?.setText(it.name)
+            binding.edtAdress.editText?.setText(it.address)
+            binding.edtPassword.editText?.setText(it.password)
+            Glide.with(binding.root)
+                .load(it.imageUrl)
+                .centerCrop()
+                .into(binding.imageView)
+        }
+
+        binding.edtName.editText?.addTextChangedListener {
+            binding.textView.text = binding.edtName.editText!!.text.toString()
+        }
+
         return binding.root
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.action_bar_done_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId) {
+            R.id.action_done -> {
+                val node = args.centralNode!!
+                node.name = binding.edtName.editText!!.text.toString()
+                node.address = binding.edtAdress.editText!!.text.toString()
+                node.password = binding.edtPassword.editText!!.text.toString()
+                viewModel.saveChanges(node)
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

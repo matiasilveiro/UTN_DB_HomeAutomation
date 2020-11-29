@@ -12,6 +12,8 @@ class CentralNodesAdapter : RecyclerView.Adapter<CentralNodesAdapter.ViewHolder>
 
     var items: List<CentralNode> by Delegates.observable(emptyList()) { _, _, _ -> notifyDataSetChanged() }
     var onClickListener : ((CentralNode) -> Unit )? = null
+    var onEditListener : ((CentralNode) -> Unit )? = null
+    var onDeleteListener : ((CentralNode) -> Unit )? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ItemRecyclerCentralNodeBinding.inflate(
@@ -23,7 +25,10 @@ class CentralNodesAdapter : RecyclerView.Adapter<CentralNodesAdapter.ViewHolder>
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(items[position], onClickListener)
+        holder.bind(items[position])
+        holder.onClickListener = onClickListener
+        holder.onEditListener = onEditListener
+        holder.onDeleteListener = onDeleteListener
     }
 
     fun setData(data: MutableList<CentralNode>){
@@ -36,8 +41,11 @@ class CentralNodesAdapter : RecyclerView.Adapter<CentralNodesAdapter.ViewHolder>
 
 
     class ViewHolder(private val binding: ItemRecyclerCentralNodeBinding) : RecyclerView.ViewHolder(binding.cardLayout) {
+        var onClickListener : ((CentralNode) -> Unit )? = null
+        var onEditListener : ((CentralNode) -> Unit )? = null
+        var onDeleteListener : ((CentralNode) -> Unit )? = null
 
-        internal fun bind(value: CentralNode, listener: ((CentralNode) -> Unit)?) {
+        internal fun bind(value: CentralNode) {
             binding.textView.text = value.name
             Glide.with(binding.root)
                 .load(value.imageUrl)
@@ -45,7 +53,13 @@ class CentralNodesAdapter : RecyclerView.Adapter<CentralNodesAdapter.ViewHolder>
                 .into(binding.imageView)
 
             binding.cardLayout.setOnClickListener {
-                listener?.invoke(value)
+                onClickListener?.invoke(value)
+            }
+            binding.btnEdit.setOnClickListener {
+                onEditListener?.invoke(value)
+            }
+            binding.btnDelete.setOnClickListener {
+                onDeleteListener?.invoke(value)
             }
         }
     }

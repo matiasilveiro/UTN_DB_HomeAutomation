@@ -35,6 +35,8 @@ class UsersRepository @Inject constructor (
         return userDataSource.sendPasswordResetEmail(email)
     }
 
-    // TODO: Logout
+    fun logout(): MyResult<Boolean> {
+        return userDataSource.logout()
+    }
     // TODO: separar repositorio de usuario y de manejo de sesion. Current user, remember, logout
 }

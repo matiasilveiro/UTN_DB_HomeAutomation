@@ -12,4 +12,5 @@ interface UsersDataSource {
     suspend fun createNewUser(user: User, email: String, password: String): MyResult<Boolean>
     suspend fun loginWithEmailAndPassword(email: String, password: String): MyResult<Boolean>
     suspend fun sendPasswordResetEmail(email: String): MyResult<Boolean>
+    fun logout(): MyResult<Boolean>
 }

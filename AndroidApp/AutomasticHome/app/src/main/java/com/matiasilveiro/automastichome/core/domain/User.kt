@@ -1,4 +1,4 @@
 package com.matiasilveiro.automastichome.core.domain
 
-data class User(var uid: String, var name: String, var email: String) {
+data class User(var uid: String, var name: String, var email: String, var profileImage: String) {
 }
