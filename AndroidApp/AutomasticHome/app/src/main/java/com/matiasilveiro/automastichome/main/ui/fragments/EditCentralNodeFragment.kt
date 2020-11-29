@@ -16,6 +16,7 @@ import com.matiasilveiro.automastichome.core.ui.BaseViewState
 import com.matiasilveiro.automastichome.core.utils.exhaustive
 import com.matiasilveiro.automastichome.core.utils.snack
 import com.matiasilveiro.automastichome.databinding.FragmentEditCentralNodeBinding
+import com.matiasilveiro.automastichome.main.domain.CentralNode
 import com.matiasilveiro.automastichome.main.ui.navigatorstates.EditCentralNodeNavigatorStates
 import com.matiasilveiro.automastichome.main.ui.viewmodels.EditCentralNodeViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -64,10 +65,14 @@ class EditCentralNodeFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId) {
             R.id.action_done -> {
-                val node = args.centralNode!!
-                node.name = binding.edtName.editText!!.text.toString()
-                node.address = binding.edtAdress.editText!!.text.toString()
-                node.password = binding.edtPassword.editText!!.text.toString()
+                val node = CentralNode(
+                    args.centralNode?.uid ?: "",
+                    binding.edtName.editText!!.text.toString(),
+                    binding.edtAdress.editText!!.text.toString(),
+                    binding.edtPassword.editText!!.text.toString(),
+                    "",
+                    args.centralNode?.role ?: 0
+                )
                 viewModel.saveChanges(node)
             }
         }

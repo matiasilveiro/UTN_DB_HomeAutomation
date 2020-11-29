@@ -54,7 +54,8 @@
         <argument
             android:name="centralNode"
             app:argType="com.matiasilveiro.automastichome.main.domain.CentralNode"
-            app:nullable="true" />
+            app:nullable="true"
+            android:defaultValue="@null"/>
     </fragment>
     <fragment
         android:id="@+id/remoteActuatorsListFragment"

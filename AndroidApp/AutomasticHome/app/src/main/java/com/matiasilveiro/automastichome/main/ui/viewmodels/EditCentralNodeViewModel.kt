@@ -28,13 +28,25 @@ class EditCentralNodeViewModel @ViewModelInject constructor(
     fun saveChanges(centralNode: CentralNode) {
         viewModelScope.launch {
             _viewState.value = BaseViewState.Loading
-            when(val result = manageCentralNodeUseCase.set(centralNode) ) {
-                is MyResult.Success -> {
-                    _navigation.value = EditCentralNodeNavigatorStates.GoBack
-                    _viewState.value = BaseViewState.Ready
+            if(centralNode.uid.isNotEmpty()) {
+                when (val result = manageCentralNodeUseCase.set(centralNode)) {
+                    is MyResult.Success -> {
+                        _navigation.value = EditCentralNodeNavigatorStates.GoBack
+                        _viewState.value = BaseViewState.Ready
+                    }
+                    is MyResult.Failure -> {
+                        _viewState.value = BaseViewState.Failure(result.exception)
+                    }
                 }
-                is MyResult.Failure -> {
-                    _viewState.value = BaseViewState.Failure(result.exception)
+            } else {
+                when (val result = manageCentralNodeUseCase.create(centralNode)) {
+                    is MyResult.Success -> {
+                        _navigation.value = EditCentralNodeNavigatorStates.GoBack
+                        _viewState.value = BaseViewState.Ready
+                    }
+                    is MyResult.Failure -> {
+                        _viewState.value = BaseViewState.Failure(result.exception)
+                    }
                 }
             }
         }

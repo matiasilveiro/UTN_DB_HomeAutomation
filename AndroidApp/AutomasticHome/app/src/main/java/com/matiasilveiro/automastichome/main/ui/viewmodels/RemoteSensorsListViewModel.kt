@@ -20,12 +20,12 @@ class RemoteSensorsListViewModel : ViewModel() {
 
     init {
         var nodesList = arrayListOf<RemoteSensor>()
-        nodesList.add(RemoteSensor("","","TV","","https://images.pexels.com/photos/1201996/pexels-photo-1201996.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940","","",0))
-        nodesList.add(RemoteSensor("","","Consola","","https://images.pexels.com/photos/687811/pexels-photo-687811.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500","","",0))
-        nodesList.add(RemoteSensor("","","Nodo 3","","","","",0))
-        nodesList.add(RemoteSensor("","","Nodo 4","","","","",0))
-        nodesList.add(RemoteSensor("","","Nodo 5","","","","",0))
-        nodesList.add(RemoteSensor("","","Nodo 6","","","","",0))
+        nodesList.add(RemoteSensor("","","TV","","https://images.pexels.com/photos/1201996/pexels-photo-1201996.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940","","°C",25))
+        nodesList.add(RemoteSensor("","","Consola","","https://images.pexels.com/photos/687811/pexels-photo-687811.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500","","%",47))
+        nodesList.add(RemoteSensor("","","Nodo 3","","","","Unidad",0))
+        nodesList.add(RemoteSensor("","","Nodo 4","","","","Unidad",1))
+        nodesList.add(RemoteSensor("","","Nodo 5","","","","Unidad",2))
+        nodesList.add(RemoteSensor("","","Nodo 6","","","","Unidad",4))
 
         _nodes.value = nodesList
     }

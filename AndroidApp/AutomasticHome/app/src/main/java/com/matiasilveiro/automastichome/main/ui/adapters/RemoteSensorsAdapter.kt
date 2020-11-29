@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.matiasilveiro.automastichome.databinding.ItemRecyclerRemoteNodeBinding
+import com.matiasilveiro.automastichome.databinding.ItemRecyclerRemoteSensorBinding
 import com.matiasilveiro.automastichome.main.domain.RemoteSensor
 import kotlin.properties.Delegates
 
@@ -14,7 +15,7 @@ class RemoteSensorsAdapter : RecyclerView.Adapter<RemoteSensorsAdapter.ViewHolde
     var onClickListener : ((RemoteSensor) -> Unit )? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = ItemRecyclerRemoteNodeBinding.inflate(
+        val binding = ItemRecyclerRemoteSensorBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
             false
@@ -35,10 +36,12 @@ class RemoteSensorsAdapter : RecyclerView.Adapter<RemoteSensorsAdapter.ViewHolde
     }
 
 
-    class ViewHolder(private val binding: ItemRecyclerRemoteNodeBinding) : RecyclerView.ViewHolder(binding.cardLayout) {
+    class ViewHolder(private val binding: ItemRecyclerRemoteSensorBinding) : RecyclerView.ViewHolder(binding.cardLayout) {
 
         internal fun bind(value: RemoteSensor, listener: ((RemoteSensor) -> Unit)?) {
             binding.txtName.text = value.name
+            binding.txtUnit.text = value.unit
+            binding.txtValue.text = value.value.toString()
             Glide.with(binding.root)
                 .load(value.imageUrl)
                 .centerCrop()
