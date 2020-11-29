@@ -107,31 +107,31 @@ CREATE TABLE `Control`
    Create Foreign Keys
 ********************************************************************************/
 ALTER TABLE `Roles` ADD CONSTRAINT `FK_User`
-    FOREIGN KEY (`UserId`) REFERENCES `Users` (`UserId`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+    FOREIGN KEY (`UserId`) REFERENCES `Users` (`UserId`) ON DELETE NO ACTION;
 CREATE INDEX `IFK_UserRoleId` ON `Roles` (`UserId`);
 
 ALTER TABLE `Roles` ADD CONSTRAINT `FK_Node`
-    FOREIGN KEY (`NodeId`) REFERENCES `Nodes_Central` (`NodeId`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+    FOREIGN KEY (`NodeId`) REFERENCES `Nodes_Central` (`NodeId`) ON DELETE NO ACTION;
 CREATE INDEX `IFK_NodeRoleId` ON `Roles` (`NodeId`);
 
 ALTER TABLE `Nodes_Actuator` ADD CONSTRAINT `FK_CentralActuator`
-    FOREIGN KEY (`CentralId`) REFERENCES `Nodes_Central` (`NodeId`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+    FOREIGN KEY (`CentralId`) REFERENCES `Nodes_Central` (`NodeId`) ON DELETE NO ACTION;
 CREATE INDEX `IFK_CentralActuatorId` ON `Nodes_Actuator` (`CentralId`);
 
 ALTER TABLE `Nodes_Sensor` ADD CONSTRAINT `FK_CentralSensor`
-    FOREIGN KEY (`CentralId`) REFERENCES `Nodes_Central` (`NodeId`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+    FOREIGN KEY (`CentralId`) REFERENCES `Nodes_Central` (`NodeId`) ON DELETE NO ACTION;
 CREATE INDEX `IFK_CentralActuatorId` ON `Nodes_Sensor` (`CentralId`);
 
 ALTER TABLE `Sensor_Actuator` ADD CONSTRAINT `FK_Sensor`
-    FOREIGN KEY (`SensorId`) REFERENCES `Nodes_Sensor` (`NodeId`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+    FOREIGN KEY (`SensorId`) REFERENCES `Nodes_Sensor` (`NodeId`) ON DELETE NO ACTION;
 CREATE INDEX `IFK_SensorActuatorId` ON `Sensor_Actuator` (`SensorId`);
 
 ALTER TABLE `Sensor_Actuator` ADD CONSTRAINT `FK_Actuator`
-    FOREIGN KEY (`ActuatorId`) REFERENCES `Nodes_Actuator` (`NodeId`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+    FOREIGN KEY (`ActuatorId`) REFERENCES `Nodes_Actuator` (`NodeId`) ON DELETE NO ACTION;
 CREATE INDEX `IFK_ActuatorSensorId` ON `Sensor_Actuator` (`ActuatorId`);
 
 ALTER TABLE `Sensor_Actuator` ADD CONSTRAINT `FK_Action`
-    FOREIGN KEY (`ActionId`) REFERENCES `Control` (`ActionId`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+    FOREIGN KEY (`ActionId`) REFERENCES `Control` (`ActionId`) ON DELETE NO ACTION;
 CREATE INDEX `IFK_ControlId` ON `Sensor_Actuator` (`ActionId`);
 
 
@@ -149,17 +149,17 @@ INSERT INTO `Nodes_Central` (`Name`,`Address`,`Password`) VALUES (N'Cabaña de S
 INSERT INTO `Nodes_Central` (`Name`,`Address`,`Password`) VALUES (N'Oficina de Mana Digital',N'1234-5678-9014',N'password');
 
 
-INSERT INTO `Roles` (`UserId`,`NodeId`,`Role`) VALUES (1,1,0);
-INSERT INTO `Roles` (`UserId`,`NodeId`,`Role`) VALUES (2,1,1);
-INSERT INTO `Roles` (`UserId`,`NodeId`,`Role`) VALUES (3,1,2);
+INSERT INTO `Roles` (`UserId`,`NodeId`,`Role`) VALUES (1,1,0);  /* Matias admin Departamento de Mati */
+INSERT INTO `Roles` (`UserId`,`NodeId`,`Role`) VALUES (2,1,1);  /* Sergio share  Departamento de Mati */
+INSERT INTO `Roles` (`UserId`,`NodeId`,`Role`) VALUES (3,1,2);  /* Roberto share  Departamento de Mati */
 
-INSERT INTO `Roles` (`UserId`,`NodeId`,`Role`) VALUES (1,2,1);
-INSERT INTO `Roles` (`UserId`,`NodeId`,`Role`) VALUES (2,2,0);
-INSERT INTO `Roles` (`UserId`,`NodeId`,`Role`) VALUES (4,2,2);
+INSERT INTO `Roles` (`UserId`,`NodeId`,`Role`) VALUES (1,2,1);  /* Matias share Cabaña de Sergio */
+INSERT INTO `Roles` (`UserId`,`NodeId`,`Role`) VALUES (2,2,0);  /* Sergio admin Cabaña de Sergio */
+INSERT INTO `Roles` (`UserId`,`NodeId`,`Role`) VALUES (4,2,2);  /* Alejandro invite Cabaña de Sergio */
 
-INSERT INTO `Roles` (`UserId`,`NodeId`,`Role`) VALUES (1,3,1);
-INSERT INTO `Roles` (`UserId`,`NodeId`,`Role`) VALUES (3,3,2);
-INSERT INTO `Roles` (`UserId`,`NodeId`,`Role`) VALUES (4,3,0);
+INSERT INTO `Roles` (`UserId`,`NodeId`,`Role`) VALUES (1,3,1);  /* Matias share Oficina de Mana Digital */
+INSERT INTO `Roles` (`UserId`,`NodeId`,`Role`) VALUES (3,3,2);  /* Roberto invite Oficina de Mana Digital */
+INSERT INTO `Roles` (`UserId`,`NodeId`,`Role`) VALUES (4,3,0);  /* Alejandro admin Oficina de Mana Digital */
 
 
 INSERT INTO `Nodes_Actuator` (`CentralId`,`Name`,`Address`,`Status`,`Type`,`Value`) VALUES (1,N'Luz cocina',N'0',N'online',N'Light',1);     /* Id = 1 */
@@ -190,3 +190,9 @@ INSERT INTO `Control` (`Name`,`ReferenceValue`,`ActionTrue`,`ActionFalse`,`Condi
 INSERT INTO `Sensor_Actuator` (`ActuatorId`,`SensorId`,`ActionId`) VALUES (4,1,1);
 INSERT INTO `Sensor_Actuator` (`ActuatorId`,`SensorId`,`ActionId`) VALUES (8,4,1);
 
+/*******************************************************************************
+   Create users
+********************************************************************************/
+
+CREATE USER 'admin'@'localhost' IDENTIFIED BY 'admin1234';
+GRANT ALL PRIVILEGES ON Automastic.* TO 'admin'@'localhost';
