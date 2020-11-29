@@ -64,4 +64,13 @@
             android:id="@+id/action_remoteActuatorsListFragment_to_nodeActuatorFragment"
             app:destination="@id/nodeActuatorFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/remoteSensorsListFragment"
+        android:name="com.matiasilveiro.automastichome.main.ui.fragments.RemoteSensorsListFragment"
+        android:label="fragment_remote_sensors_list"
+        tools:layout="@layout/fragment_remote_sensors_list" >
+        <action
+            android:id="@+id/action_remoteSensorsListFragment_to_nodeSensorFragment"
+            app:destination="@id/nodeSensorFragment" />
+    </fragment>
 </navigation>

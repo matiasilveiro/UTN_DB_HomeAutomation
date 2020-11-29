@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.matiasilveiro.automastichome.R
@@ -20,6 +21,7 @@ import com.matiasilveiro.automastichome.main.domain.RemoteActuator
 import com.matiasilveiro.automastichome.main.ui.adapters.RemoteActuatorsAdapter
 import com.matiasilveiro.automastichome.main.ui.navigatorstates.RemoteActuatorsListNavigatorStates
 import com.matiasilveiro.automastichome.main.ui.viewmodels.RemoteActuatorsListViewModel
+import com.matiasilveiro.automastichome.main.ui.viewmodels.RemoteNodesListViewModel
 
 class RemoteActuatorsListFragment : Fragment() {
 
@@ -29,6 +31,7 @@ class RemoteActuatorsListFragment : Fragment() {
     }
 
     private val viewModel: RemoteActuatorsListViewModel by activityViewModels()
+    private val nodesViewModel: RemoteNodesListViewModel by activityViewModels()
     private var _binding: FragmentRemoteActuatorsListBinding? = null
     private val binding get() = _binding!!
 
@@ -36,6 +39,9 @@ class RemoteActuatorsListFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         _binding = FragmentRemoteActuatorsListBinding.inflate(layoutInflater)
         setHasOptionsMenu(true)
+
+        viewModel.setCentralNode(nodesViewModel.centralUid)
+        viewModel.refreshNodes()
 
         return binding.root
     }
@@ -82,9 +88,9 @@ class RemoteActuatorsListFragment : Fragment() {
         val adapter = RemoteActuatorsAdapter()
         adapter.setData(list)
 
-        adapter.onClickListener = { onNodeClicked(it) }
+        adapter.onClickListener = { viewModel.onNodeClicked(it) }
         adapter.onSwitchListener = { node, state ->
-            onNodeSwitchToggled(node, state)
+            viewModel.onNodeSwitchToggled(node, state)
         }
 
         with(binding.recyclerView) {
@@ -92,14 +98,6 @@ class RemoteActuatorsListFragment : Fragment() {
             this.layoutManager = LinearLayoutManager(context)
             this.adapter = adapter
         }
-    }
-
-    private fun onNodeClicked(node: RemoteActuator) {
-        Log.d(TAG, "Node clicked: ${node.name}")
-    }
-
-    private fun onNodeSwitchToggled(node: RemoteActuator, state: Boolean) {
-        Log.d(TAG, "Node switch: ${node.name} - State: $state")
     }
 
 }

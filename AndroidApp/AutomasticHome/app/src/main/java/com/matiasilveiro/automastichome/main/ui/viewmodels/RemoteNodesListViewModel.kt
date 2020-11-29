@@ -15,6 +15,12 @@ class RemoteNodesListViewModel : ViewModel() {
     private val _viewState : MutableLiveData<BaseViewState> = MutableLiveData()
     val viewState : LiveData<BaseViewState> get() = _viewState
 
+    var centralUid: String = ""
+
+    fun setCentralNode(uid: String) {
+        centralUid = uid
+    }
+
 
     fun goBack() {
         _navigation.value = RemoteNodesListNavigatorStates.GoBack

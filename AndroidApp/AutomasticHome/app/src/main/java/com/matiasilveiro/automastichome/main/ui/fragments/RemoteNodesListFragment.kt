@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.snackbar.Snackbar
@@ -35,10 +36,14 @@ class RemoteNodesListFragment : Fragment() {
     private var _binding: FragmentRemoteNodesListBinding? = null
     private val binding get() = _binding!!
 
+    private val args: RemoteNodesListFragmentArgs by navArgs()
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         _binding = FragmentRemoteNodesListBinding.inflate(layoutInflater)
         setHasOptionsMenu(true)
+
+        viewModel.setCentralNode(args.centralNode.uid)
 
         return binding.root
     }
