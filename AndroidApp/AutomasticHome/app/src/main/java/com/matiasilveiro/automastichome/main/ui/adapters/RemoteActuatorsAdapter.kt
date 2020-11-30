@@ -4,6 +4,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.matiasilveiro.automastichome.R
+import com.matiasilveiro.automastichome.core.utils.disable
 import com.matiasilveiro.automastichome.databinding.ItemRecyclerRemoteActuatorBinding
 import com.matiasilveiro.automastichome.databinding.ItemRecyclerRemoteNodeBinding
 import com.matiasilveiro.automastichome.main.domain.RemoteActuator
@@ -41,10 +43,24 @@ class RemoteActuatorsAdapter : RecyclerView.Adapter<RemoteActuatorsAdapter.ViewH
 
         internal fun bind(value: RemoteActuator, clickListener: ((RemoteActuator) -> Unit)?, switchListener: ((RemoteActuator, Boolean) -> Unit)?) {
             binding.txtName.text = value.name
+            binding.txtStatus.text = value.status
             Glide.with(binding.root)
                 .load(value.imageUrl)
                 .centerCrop()
                 .into(binding.imageView)
+
+            binding.switcher.setChecked(value.value != 0)
+
+            val imageStatus = when(value.status) {
+                "Online" -> {
+                    R.drawable.circle_online
+                }
+                else -> {
+                    binding.switcher.disable()
+                    R.drawable.circle_offline
+                }
+            }
+            binding.imgStatus.setImageResource(imageStatus)
 
             binding.cardLayout.setOnClickListener {
                 clickListener?.invoke(value)
