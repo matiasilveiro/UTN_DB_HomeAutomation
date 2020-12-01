@@ -3,74 +3,78 @@ package com.matiasilveiro.automastichome.main.data
 import com.matiasilveiro.automastichome.core.utils.MyResult
 import com.matiasilveiro.automastichome.main.domain.*
 import com.matiasilveiro.automastichome.main.framework.FirebaseNodesSource
+import com.matiasilveiro.automastichome.main.framework.RetrofitNodesSource
 import javax.inject.Inject
 
 class NodesRepository @Inject constructor(
-        private val firebaseDataSource: FirebaseNodesSource
-) : NodesDataSource{
+        private val firebaseDataSource: FirebaseNodesSource,
+        private val retrofitNodesSource: RetrofitNodesSource
+) : NodesDataSource {
+
+    val source = retrofitNodesSource
 
     override suspend fun getCentralNodesByUser(uid: String): MyResult<ArrayList<CentralNode>?> {
-        return firebaseDataSource.getCentralNodesByUser(uid)
+        return source.getCentralNodesByUser(uid)
     }
 
     override suspend fun createCentralNode(node: CentralNode): MyResult<Boolean> {
-        return firebaseDataSource.createCentralNode(node)
+        return source.createCentralNode(node)
     }
 
     override suspend fun setCentralNode(node: CentralNode): MyResult<Boolean> {
-        return firebaseDataSource.setCentralNode(node)
+        return source.setCentralNode(node)
     }
 
     override suspend fun deleteCentralNode(node: CentralNode): MyResult<Boolean> {
-        return firebaseDataSource.deleteCentralNode(node)
+        return source.deleteCentralNode(node)
     }
 
     override suspend fun getRemoteActuatorsByCentral(uid: String): MyResult<ArrayList<RemoteActuator>?> {
-        return firebaseDataSource.getRemoteActuatorsByCentral(uid)
+        return source.getRemoteActuatorsByCentral(uid)
     }
 
     override suspend fun createRemoteActuator(node: RemoteActuator): MyResult<Boolean> {
-        return firebaseDataSource.createRemoteActuator(node)
+        return source.createRemoteActuator(node)
     }
 
     override suspend fun setRemoteActuator(node: RemoteActuator): MyResult<Boolean> {
-        return firebaseDataSource.setRemoteActuator(node)
+        return source.setRemoteActuator(node)
     }
 
     override suspend fun deleteRemoteActuator(node: RemoteActuator): MyResult<Boolean> {
-        return firebaseDataSource.deleteRemoteActuator(node)
+        return source.deleteRemoteActuator(node)
     }
 
     override suspend fun getRemoteSensorsByCentral(uid: String): MyResult<ArrayList<RemoteSensor>?> {
-        return firebaseDataSource.getRemoteSensorsByCentral(uid)
+        return source.getRemoteSensorsByCentral(uid)
     }
 
     override suspend fun createRemoteSensor(node: RemoteSensor): MyResult<Boolean> {
-        return firebaseDataSource.createRemoteSensor(node)
+        return source.createRemoteSensor(node)
     }
 
     override suspend fun setRemoteSensor(node: RemoteSensor): MyResult<Boolean> {
-        return firebaseDataSource.setRemoteSensor(node)
+        return source.setRemoteSensor(node)
     }
 
     override suspend fun deleteRemoteSensor(node: RemoteSensor): MyResult<Boolean> {
-        return firebaseDataSource.deleteRemoteSensor(node)
+        return source.deleteRemoteSensor(node)
     }
 
     override suspend fun getRemoteControlsByCentral(uid: String): MyResult<ArrayList<ControlFeedback>?> {
-        return firebaseDataSource.getRemoteControlsByCentral(uid)
+        return source.getRemoteControlsByCentral(uid)
     }
 
     override suspend fun createRemoteControl(sensor: RemoteSensor, actuator: RemoteActuator, control: ControlFeedback): MyResult<Boolean> {
-        return firebaseDataSource.createRemoteControl(sensor, actuator, control)
+        return source.createRemoteControl(sensor, actuator, control)
     }
 
     override suspend fun setRemoteControl(control: ControlFeedback): MyResult<Boolean> {
-        return firebaseDataSource.setRemoteControl(control)
+        return source.setRemoteControl(control)
     }
 
     override suspend fun deleteRemoteControl(control: ControlFeedback): MyResult<Boolean> {
-        return firebaseDataSource.deleteRemoteControl(control)
+        return source.deleteRemoteControl(control)
     }
 
 }
