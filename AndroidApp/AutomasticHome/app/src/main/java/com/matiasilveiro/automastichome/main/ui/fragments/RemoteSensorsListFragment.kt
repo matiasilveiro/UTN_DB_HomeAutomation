@@ -19,6 +19,7 @@ import com.matiasilveiro.automastichome.databinding.FragmentRemoteSensorsListBin
 import com.matiasilveiro.automastichome.main.domain.RemoteSensor
 import com.matiasilveiro.automastichome.main.ui.adapters.RemoteSensorsAdapter
 import com.matiasilveiro.automastichome.main.ui.navigatorstates.RemoteSensorsListNavigatorStates
+import com.matiasilveiro.automastichome.main.ui.viewmodels.RemoteNodesListViewModel
 import com.matiasilveiro.automastichome.main.ui.viewmodels.RemoteSensorsListViewModel
 
 class RemoteSensorsListFragment : Fragment() {
@@ -28,6 +29,7 @@ class RemoteSensorsListFragment : Fragment() {
     }
 
     private val viewModel: RemoteSensorsListViewModel by activityViewModels()
+    private val nodesViewModel: RemoteNodesListViewModel by activityViewModels()
     private var _binding: FragmentRemoteSensorsListBinding? = null
     private val binding get() = _binding!!
 
@@ -35,6 +37,9 @@ class RemoteSensorsListFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         _binding = FragmentRemoteSensorsListBinding.inflate(layoutInflater)
         setHasOptionsMenu(true)
+
+        viewModel.setCentralNode(nodesViewModel.centralUid)
+        viewModel.refreshNodes()
 
         return binding.root
     }
