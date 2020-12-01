@@ -31,6 +31,7 @@ CREATE TABLE `Users`
     `Displayname` CHAR(50),
     `Email` CHAR(50),
     `Password` CHAR(50),
+    `ProfileImage` CHAR(120),
     CONSTRAINT `PK_Users` PRIMARY KEY  (`UserId`)
 );
 
@@ -49,6 +50,7 @@ CREATE TABLE `Nodes_Central`
     `Name` CHAR(50) NOT NULL,
     `Address` CHAR(50) NOT NULL,
     `Password` CHAR(50) NOT NULL,
+    `ImageUrl` CHAR(120),
     CONSTRAINT `PK_Node` PRIMARY KEY  (`NodeId`)
 );
 
@@ -58,6 +60,7 @@ CREATE TABLE `Nodes_Actuator`
     `CentralId` INT NOT NULL,
     `Name` CHAR(50),
     `Address` CHAR(50) NOT NULL,
+    `ImageUrl` CHAR(120),
     `Status` CHAR(10),
     `Type` CHAR(10),
     `Value` INT,
@@ -71,6 +74,7 @@ CREATE TABLE `Nodes_Sensor`
     `CentralId` INT NOT NULL,
     `Name` CHAR(50),
     `Address` CHAR(50) NOT NULL,
+    `ImageUrl` CHAR(120),
     `Status` CHAR(10),
     `Unit` CHAR(10),
     `Value` INT,
@@ -144,9 +148,9 @@ INSERT INTO `Users` (`Displayname`,`Email`,`Password`) VALUES (N'Roberto',N'robe
 INSERT INTO `Users` (`Displayname`,`Email`,`Password`) VALUES (N'Alejandro',N'alejandro@gmail.com',N'alejandro');
 
 
-INSERT INTO `Nodes_Central` (`Name`,`Address`,`Password`) VALUES (N'Departamento de Mati',N'1234-5678-9012',N'password');
-INSERT INTO `Nodes_Central` (`Name`,`Address`,`Password`) VALUES (N'Cabaña de Sergio',N'1234-5678-9013',N'password');
-INSERT INTO `Nodes_Central` (`Name`,`Address`,`Password`) VALUES (N'Oficina de Mana Digital',N'1234-5678-9014',N'password');
+INSERT INTO `Nodes_Central` (`Name`,`Address`,`Password`,`ImageUrl`) VALUES (N'Departamento de Mati',N'1234-5678-9012',N'password',N'https://images.pexels.com/photos/1267438/pexels-photo-1267438.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940');
+INSERT INTO `Nodes_Central` (`Name`,`Address`,`Password`,`ImageUrl`) VALUES (N'Cabaña de Sergio',N'1234-5678-9013',N'password',N'https://images.pexels.com/photos/463734/pexels-photo-463734.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260');
+INSERT INTO `Nodes_Central` (`Name`,`Address`,`Password`,`ImageUrl`) VALUES (N'Oficina de Mana Digital',N'1234-5678-9014',N'password',N'https://images.pexels.com/photos/1170412/pexels-photo-1170412.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940');
 
 
 INSERT INTO `Roles` (`UserId`,`NodeId`,`Role`) VALUES (1,1,0);  /* Matias admin Departamento de Mati */
@@ -162,25 +166,25 @@ INSERT INTO `Roles` (`UserId`,`NodeId`,`Role`) VALUES (3,3,2);  /* Roberto invit
 INSERT INTO `Roles` (`UserId`,`NodeId`,`Role`) VALUES (4,3,0);  /* Alejandro admin Oficina de Mana Digital */
 
 
-INSERT INTO `Nodes_Actuator` (`CentralId`,`Name`,`Address`,`Status`,`Type`,`Value`) VALUES (1,N'Luz cocina',N'0',N'online',N'Light',1);     /* Id = 1 */
-INSERT INTO `Nodes_Actuator` (`CentralId`,`Name`,`Address`,`Status`,`Type`,`Value`) VALUES (1,N'Luz living',N'1',N'offline',N'Light',0);    /* Id = 2 */
-INSERT INTO `Nodes_Actuator` (`CentralId`,`Name`,`Address`,`Status`,`Type`,`Value`) VALUES (1,N'Televisor',N'2',N'online',N'ON-OFF',1);     /* Id = 3 */
-INSERT INTO `Nodes_Actuator` (`CentralId`,`Name`,`Address`,`Status`,`Type`,`Value`) VALUES (1,N'Ventilador',N'3',N'online',N'Dimmer',100);  /* Id = 4 */
+INSERT INTO `Nodes_Actuator` (`CentralId`,`Name`,`Address`,`Status`,`Type`,`Value`,`ImageUrl`) VALUES (1,N'TV',N'0',N'Online',N'Light',1,N'https://images.pexels.com/photos/1201996/pexels-photo-1201996.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940');     /* Id = 1 */
+INSERT INTO `Nodes_Actuator` (`CentralId`,`Name`,`Address`,`Status`,`Type`,`Value`,`ImageUrl`) VALUES (1,N'Consola',N'1',N'Offline',N'ON-OFF',0,N'https://images.pexels.com/photos/687811/pexels-photo-687811.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500');    /* Id = 2 */
+INSERT INTO `Nodes_Actuator` (`CentralId`,`Name`,`Address`,`Status`,`Type`,`Value`,`ImageUrl`) VALUES (1,N'Televisor',N'2',N'Online',N'ON-OFF',1,N'https://i.pinimg.com/originals/0e/5e/29/0e5e29216c932224cb4d12c8dc89d446.jpg');     /* Id = 3 */
+INSERT INTO `Nodes_Actuator` (`CentralId`,`Name`,`Address`,`Status`,`Type`,`Value`,`ImageUrl`) VALUES (1,N'Ventilador',N'3',N'Online',N'Dimmer',100,N'');  /* Id = 4 */
 
-INSERT INTO `Nodes_Actuator` (`CentralId`,`Name`,`Address`,`Status`,`Type`,`Value`) VALUES (2,N'Luz habitacion',N'1',N'online',N'Light',0); /* Id = 5 */
-INSERT INTO `Nodes_Actuator` (`CentralId`,`Name`,`Address`,`Status`,`Type`,`Value`) VALUES (2,N'Servidor',N'2',N'online',N'ON-OFF',1);      /* Id = 6 */
-INSERT INTO `Nodes_Actuator` (`CentralId`,`Name`,`Address`,`Status`,`Type`,`Value`) VALUES (2,N'Ventilador',N'3',N'online',N'Dimmer',120);  /* Id = 7 */
-INSERT INTO `Nodes_Actuator` (`CentralId`,`Name`,`Address`,`Status`,`Type`,`Value`) VALUES (2,N'Luz exterior',N'4',N'online',N'Light',0);   /* Id = 8 */
+INSERT INTO `Nodes_Actuator` (`CentralId`,`Name`,`Address`,`Status`,`Type`,`Value`,`ImageUrl`) VALUES (2,N'Mac Mini',N'1',N'Online',N'Light',0,N'https://i.blogs.es/d550b2/type-c-aluminum-stand-hub-for-mac-mini-usb-hubs-satechi-907708/450_1000.jpg'); /* Id = 5 */
+INSERT INTO `Nodes_Actuator` (`CentralId`,`Name`,`Address`,`Status`,`Type`,`Value`,`ImageUrl`) VALUES (2,N'Servidor',N'2',N'Online',N'ON-OFF',1,N'');      /* Id = 6 */
+INSERT INTO `Nodes_Actuator` (`CentralId`,`Name`,`Address`,`Status`,`Type`,`Value`,`ImageUrl`) VALUES (2,N'Ventilador',N'3',N'Online',N'Dimmer',120,N'');  /* Id = 7 */
+INSERT INTO `Nodes_Actuator` (`CentralId`,`Name`,`Address`,`Status`,`Type`,`Value`,`ImageUrl`) VALUES (2,N'Luz exterior',N'4',N'Online',N'Light',0,N'');   /* Id = 8 */
 
-INSERT INTO `Nodes_Actuator` (`CentralId`,`Name`,`Address`,`Status`,`Type`,`Value`) VALUES (3,N'Cafetera',N'0',N'online',N'ON-OFF',1);      /* Id = 9 */
-INSERT INTO `Nodes_Actuator` (`CentralId`,`Name`,`Address`,`Status`,`Type`,`Value`) VALUES (3,N'Iluminacion general',N'1',N'offline',N'Light',0);   /* Id = 10 */
-INSERT INTO `Nodes_Actuator` (`CentralId`,`Name`,`Address`,`Status`,`Type`,`Value`) VALUES (3,N'Ventilador',N'2',N'online',N'Dimmer',100);  /* Id = 11 */
+INSERT INTO `Nodes_Actuator` (`CentralId`,`Name`,`Address`,`Status`,`Type`,`Value`,`ImageUrl`) VALUES (3,N'Mac Mini',N'0',N'Online',N'ON-OFF',1,N'https://i.blogs.es/d550b2/type-c-aluminum-stand-hub-for-mac-mini-usb-hubs-satechi-907708/450_1000.jpg');      /* Id = 9 */
+INSERT INTO `Nodes_Actuator` (`CentralId`,`Name`,`Address`,`Status`,`Type`,`Value`,`ImageUrl`) VALUES (3,N'Iluminacion general',N'1',N'Offline',N'Light',0,N'');   /* Id = 10 */
+INSERT INTO `Nodes_Actuator` (`CentralId`,`Name`,`Address`,`Status`,`Type`,`Value`,`ImageUrl`) VALUES (3,N'Aire acondicionado',N'2',N'Online',N'Dimmer',100,N'');  /* Id = 11 */
 
 
-INSERT INTO `Nodes_Sensor` (`CentralId`,`Name`,`Address`,`Status`,`Unit`,`Value`) VALUES (1,N'Temperatura',N'0',N'online',N'C',27);         /* Id = 1 */
-INSERT INTO `Nodes_Sensor` (`CentralId`,`Name`,`Address`,`Status`,`Unit`,`Value`) VALUES (1,N'Humedad',N'1',N'online',N'%',30);             /* Id = 2 */
-INSERT INTO `Nodes_Sensor` (`CentralId`,`Name`,`Address`,`Status`,`Unit`,`Value`) VALUES (1,N'Luminosidad',N'1',N'online',N'Lumens',30);    /* Id = 3 */
-INSERT INTO `Nodes_Sensor` (`CentralId`,`Name`,`Address`,`Status`,`Unit`,`Value`) VALUES (2,N'Luminosidad',N'1',N'online',N'Lumens',35);    /* Id = 4 */
+INSERT INTO `Nodes_Sensor` (`CentralId`,`Name`,`Address`,`Status`,`Unit`,`Value`,`ImageUrl`) VALUES (1,N'Temperatura',N'0',N'Online',N'C',27,N'');         /* Id = 1 */
+INSERT INTO `Nodes_Sensor` (`CentralId`,`Name`,`Address`,`Status`,`Unit`,`Value`,`ImageUrl`) VALUES (1,N'Humedad',N'1',N'Online',N'%',30,N'');             /* Id = 2 */
+INSERT INTO `Nodes_Sensor` (`CentralId`,`Name`,`Address`,`Status`,`Unit`,`Value`,`ImageUrl`) VALUES (1,N'Luminosidad',N'1',N'Online',N'Lumens',30,N'');    /* Id = 3 */
+INSERT INTO `Nodes_Sensor` (`CentralId`,`Name`,`Address`,`Status`,`Unit`,`Value`,`ImageUrl`) VALUES (2,N'Luminosidad',N'1',N'Online',N'Lumens',35,N'');    /* Id = 4 */
 
 
 INSERT INTO `Control` (`Name`,`ReferenceValue`,`ActionTrue`,`ActionFalse`,`Condition`) VALUES (N'Control ventilador',28,1,0,N'>=');
@@ -194,5 +198,5 @@ INSERT INTO `Sensor_Actuator` (`ActuatorId`,`SensorId`,`ActionId`) VALUES (8,4,1
    Create users
 ********************************************************************************/
 
-CREATE USER 'admin'@'localhost' IDENTIFIED BY 'admin1234';
+CREATE USER IF NOT EXISTS 'admin'@'localhost' IDENTIFIED BY 'admin1234';
 GRANT ALL PRIVILEGES ON Automastic.* TO 'admin'@'localhost';
