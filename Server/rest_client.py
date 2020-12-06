@@ -4,7 +4,7 @@ import requests
 import urllib.parse
 from pprint import pprint
 
-URL = 'http://localhost:5000/'
+URL = 'http://localhost:5000/central_nodes/1'
 
 r = requests.get(URL)
 
