@@ -49,7 +49,7 @@ class FirebaseUsersSource @Inject constructor(
 
             val reference = db.collection(USERS).add(user).await()
             user.uid = result.user!!.uid
-            db.collection("UsersShop").document(reference.id).set(user).await()
+            db.collection(USERS).document(reference.id).set(user).await()
 
             Log.d("FirebaseUserSource", "Shop created with uid ${reference.id}")
         } catch (e: Exception) {

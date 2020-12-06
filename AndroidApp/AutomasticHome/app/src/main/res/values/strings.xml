@@ -19,6 +19,13 @@
     <string name="fragment_signin_signup_button">REGISTRARSE</string>
 
 
+    <string name="fragment_signup_username">Usuario</string>
+    <string name="fragment_signup_password">Contraseña</string>
+    <string name="fragment_signup_pswd_check">Reingresar contraseña</string>
+    <string name="fragment_signup_forgot_password">¿Olvido su contraseña?</string>
+    <string name="fragment_signup_create_button">Crear</string>
+
+
     <!-- Error messages -->
     <string name="msg_error_default">Error al procesar la solicitud</string>
 
