@@ -1,6 +1,7 @@
 package com.matiasilveiro.automastichome.main.framework
 
 import android.util.Log
+import com.google.gson.Gson
 import com.matiasilveiro.automastichome.core.utils.MyResult
 import com.matiasilveiro.automastichome.main.data.NodesDataSource
 import com.matiasilveiro.automastichome.main.domain.CentralNode
@@ -54,7 +55,24 @@ class RetrofitNodesSource : NodesDataSource {
     }
 
     override suspend fun setCentralNode(node: CentralNode): MyResult<Boolean> {
-        TODO("Not yet implemented")
+        try {
+            val response = apiClient.setCentralNode("1",Gson().toJson(node))
+            // Check if response was successful.
+            if (response.isSuccessful && response.body() != null) {
+                val data = response.body()!!
+                Log.d("RetrofitNodesSource", "Node created, ${data.status}, ${data.message}")
+
+                return MyResult.Success(true)
+            } else {
+                // Show API error.
+                Log.d("Retrofit", "Error occurred: ${response.message()}")
+                return MyResult.Success(false)
+            }
+        } catch (e: Exception) {
+            // Show API error. This is the error raised by the client.
+            Log.d("Retrofit", "Error occurred: ${e.message}")
+            return MyResult.Failure(e)
+        }
     }
 
     override suspend fun deleteCentralNode(node: CentralNode): MyResult<Boolean> {
@@ -87,11 +105,66 @@ class RetrofitNodesSource : NodesDataSource {
     }
 
     override suspend fun createRemoteActuator(node: RemoteActuator): MyResult<Boolean> {
-        TODO("Not yet implemented")
+        try {
+            val response = apiClient.createRemoteActuator(Gson().toJson(node))
+            // Check if response was successful.
+            if (response.isSuccessful && response.body() != null) {
+                val data = response.body()!!
+                Log.d("RetrofitNodesSource", "Node created, ${data.status}, ${data.message}")
+
+                return MyResult.Success(true)
+            } else {
+                // Show API error.
+                Log.d("Retrofit", "Error occurred: ${response.message()}")
+                return MyResult.Success(false)
+            }
+        } catch (e: Exception) {
+            // Show API error. This is the error raised by the client.
+            Log.d("Retrofit", "Error occurred: ${e.message}")
+            return MyResult.Failure(e)
+        }
     }
 
     override suspend fun setRemoteActuator(node: RemoteActuator): MyResult<Boolean> {
-        TODO("Not yet implemented")
+        try {
+            val response = apiClient.setRemoteActuator(node.centralUid, Gson().toJson(node))
+            // Check if response was successful.
+            if (response.isSuccessful && response.body() != null) {
+                val data = response.body()!!
+                Log.d("RetrofitNodesSource", "Node created, ${data.status}, ${data.message}")
+
+                return MyResult.Success(true)
+            } else {
+                // Show API error.
+                Log.d("Retrofit", "Error occurred: ${response.message()}")
+                return MyResult.Success(false)
+            }
+        } catch (e: Exception) {
+            // Show API error. This is the error raised by the client.
+            Log.d("Retrofit", "Error occurred: ${e.message}")
+            return MyResult.Failure(e)
+        }
+    }
+
+    override suspend fun setRemoteActuatorValue(node: RemoteActuator): MyResult<Boolean> {
+        try {
+            val response = apiClient.setRemoteActuatorValue(node.uid.toInt(), node.value)
+            // Check if response was successful.
+            if (response.isSuccessful && response.body() != null) {
+                val data = response.body()!!
+                Log.d("RetrofitNodesSource", "Node created, ${data.status}, ${data.message}")
+
+                return MyResult.Success(true)
+            } else {
+                // Show API error.
+                Log.d("Retrofit", "Error occurred: ${response.message()}")
+                return MyResult.Success(false)
+            }
+        } catch (e: Exception) {
+            // Show API error. This is the error raised by the client.
+            Log.d("Retrofit", "Error occurred: ${e.message}")
+            return MyResult.Failure(e)
+        }
     }
 
     override suspend fun deleteRemoteActuator(node: RemoteActuator): MyResult<Boolean> {

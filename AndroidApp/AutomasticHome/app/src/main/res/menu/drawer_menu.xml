@@ -8,4 +8,8 @@
         android:id="@+id/connectToCentralNode"
         android:icon="@drawable/ic_connect"
         android:title="Conectar a nodo central" />
+    <item
+        android:id="@+id/controlsListFragment"
+        android:icon="@drawable/ic_connect"
+        android:title="Control automatico" />
 </menu>

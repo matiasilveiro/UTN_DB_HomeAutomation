@@ -74,4 +74,23 @@
             android:id="@+id/action_remoteSensorsListFragment_to_nodeSensorFragment"
             app:destination="@id/nodeSensorFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/controlsListFragment"
+        android:name="com.matiasilveiro.automastichome.main.ui.fragments.ControlsListFragment"
+        android:label="fragment_controls_list"
+        tools:layout="@layout/fragment_controls_list" >
+        <action
+            android:id="@+id/action_controlsListFragment_to_newControlFragment"
+            app:destination="@id/newControlFragment" />
+        <argument
+            android:name="control"
+            app:argType="com.matiasilveiro.automastichome.main.domain.ControlFeedback"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
+    <fragment
+        android:id="@+id/newControlFragment"
+        android:name="com.matiasilveiro.automastichome.main.ui.fragments.NewControlFragment"
+        android:label="fragment_new_control"
+        tools:layout="@layout/fragment_new_control" />
 </navigation>

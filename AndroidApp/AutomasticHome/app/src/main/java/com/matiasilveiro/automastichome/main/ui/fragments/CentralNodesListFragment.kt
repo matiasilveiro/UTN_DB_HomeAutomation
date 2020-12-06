@@ -39,6 +39,10 @@ class CentralNodesListFragment : Fragment() {
         _binding = FragmentCentralNodesListBinding.inflate(layoutInflater)
         setHasOptionsMenu(true)
 
+        binding.swipeRefresh.setOnRefreshListener {
+            viewModel.refreshNodes()
+        }
+
         return binding.root
     }
 
@@ -83,11 +87,11 @@ class CentralNodesListFragment : Fragment() {
 
     private fun enableUI(enable: Boolean) {
         if(enable) {
-            //binding.grayblur.visibility = View.GONE
-            //binding.progressLoader.visibility = View.GONE
+            binding.grayblur.visibility = View.GONE
+            binding.progressLoader.visibility = View.GONE
         } else {
-            //binding.grayblur.visibility = View.VISIBLE
-            //binding.progressLoader.visibility = View.VISIBLE
+            binding.grayblur.visibility = View.VISIBLE
+            binding.progressLoader.visibility = View.VISIBLE
         }
     }
 
@@ -106,5 +110,6 @@ class CentralNodesListFragment : Fragment() {
             this.layoutManager = LinearLayoutManager(context)
             this.adapter = adapter
         }
+        binding.swipeRefresh.isRefreshing = false
     }
 }

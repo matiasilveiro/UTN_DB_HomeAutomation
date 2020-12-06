@@ -16,9 +16,11 @@ class RemoteNodesListViewModel : ViewModel() {
     val viewState : LiveData<BaseViewState> get() = _viewState
 
     var centralUid: String = ""
+    var role: Int = 2
 
-    fun setCentralNode(uid: String) {
-        centralUid = uid
+    fun setCentralNode(uid: String, role: Int) {
+        this.centralUid = uid
+        this.role = role
     }
 
 

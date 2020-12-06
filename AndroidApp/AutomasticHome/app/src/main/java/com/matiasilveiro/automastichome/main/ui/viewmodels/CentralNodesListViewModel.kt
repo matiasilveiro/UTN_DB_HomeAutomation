@@ -31,25 +31,39 @@ class CentralNodesListViewModel  @ViewModelInject constructor(
     val nodes : LiveData<ArrayList<CentralNode>> get() = _nodes
 
     init {
+        loadNodes()
+    }
+
+    fun refreshNodes() {
+        viewModelScope.launch {
+            _viewState.value = DataViewState.Refreshing
+            getNodesList()
+        }
+    }
+
+    fun loadNodes() {
         viewModelScope.launch {
             _viewState.value = DataViewState.Loading
+            getNodesList()
+        }
+    }
 
-            when(val result = getCurrentUserUseCase()) {
-                is MyResult.Success -> {
-                    val user = result.data!!
-                    when(val nodes = getCentralNodesUseCase(user.uid)) {
-                        is MyResult.Success -> {
-                            _nodes.value = nodes.data
-                            _viewState.value = DataViewState.Ready
-                        }
-                        is MyResult.Failure -> {
-                            _viewState.value = DataViewState.Failure(nodes.exception)
-                        }
+    private suspend fun getNodesList() {
+        when(val result = getCurrentUserUseCase()) {
+            is MyResult.Success -> {
+                val user = result.data!!
+                when(val nodes = getCentralNodesUseCase(user.uid)) {
+                    is MyResult.Success -> {
+                        _nodes.value = nodes.data
+                        _viewState.value = DataViewState.Ready
+                    }
+                    is MyResult.Failure -> {
+                        _viewState.value = DataViewState.Failure(nodes.exception)
                     }
                 }
-                is MyResult.Failure -> {
-                    _viewState.value = DataViewState.Failure(result.exception)
-                }
+            }
+            is MyResult.Failure -> {
+                _viewState.value = DataViewState.Failure(result.exception)
             }
         }
     }

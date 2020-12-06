@@ -41,6 +41,10 @@ class NodesRepository @Inject constructor(
         return source.setRemoteActuator(node)
     }
 
+    override suspend fun setRemoteActuatorValue(node: RemoteActuator): MyResult<Boolean> {
+        return source.setRemoteActuatorValue(node)
+    }
+
     override suspend fun deleteRemoteActuator(node: RemoteActuator): MyResult<Boolean> {
         return source.deleteRemoteActuator(node)
     }

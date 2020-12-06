@@ -43,7 +43,7 @@ class RemoteNodesListFragment : Fragment() {
         _binding = FragmentRemoteNodesListBinding.inflate(layoutInflater)
         setHasOptionsMenu(true)
 
-        viewModel.setCentralNode(args.centralNode.uid)
+        viewModel.setCentralNode(args.centralNode.uid, args.centralNode.role)
 
         return binding.root
     }

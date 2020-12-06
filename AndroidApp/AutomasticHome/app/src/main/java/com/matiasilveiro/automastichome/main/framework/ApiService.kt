@@ -4,52 +4,61 @@ import com.google.gson.JsonArray
 import com.matiasilveiro.automastichome.core.utils.MyResult
 import com.matiasilveiro.automastichome.main.data.NodesDataSource
 import com.matiasilveiro.automastichome.main.domain.*
-import com.matiasilveiro.automastichome.main.framework.mappers.RetrofitCentralNode
-import com.matiasilveiro.automastichome.main.framework.mappers.RetrofitControlFeedback
-import com.matiasilveiro.automastichome.main.framework.mappers.RetrofitRemoteActuator
-import com.matiasilveiro.automastichome.main.framework.mappers.RetrofitRemoteSensor
+import com.matiasilveiro.automastichome.main.framework.mappers.*
 import retrofit2.Response
-import retrofit2.http.GET
-import retrofit2.http.Path
-import retrofit2.http.Url
+import retrofit2.http.*
 
 interface ApiService {
 
     @GET("/central_nodes/userId={uid}")
     suspend fun getCentralNodesByUser(@Path("uid") uid: String): Response<ArrayList<RetrofitCentralNode>>
 
-    suspend fun createCentralNode(node: CentralNode): Response<Boolean>
+    suspend fun createCentralNode(node: CentralNode): Response<RetrofitResult>
 
-    suspend fun setCentralNode(node: CentralNode): Response<Boolean>
+    @PUT("/central_nodes/userId={uid}")
+    @FormUrlEncoded
+    suspend fun setCentralNode(@Path("uid") uid: String, @Field("jsonNode") node: String): Response<RetrofitResult>
 
-    suspend fun deleteCentralNode(node: CentralNode): Response<Boolean>
+    suspend fun deleteCentralNode(node: CentralNode): Response<RetrofitResult>
 
 
     @GET("/remote_actuators/centralId={uid}")
     suspend fun getRemoteActuatorsByCentral(@Path("uid") uid: String): Response<ArrayList<RetrofitRemoteActuator>>
 
-    suspend fun createRemoteActuator(node: RemoteActuator): Response<Boolean>
+    @POST("remote_actuators/new")
+    @FormUrlEncoded
+    suspend fun createRemoteActuator(@Field("jsonNode") node: String): Response<RetrofitResult>
 
-    suspend fun setRemoteActuator(node: RemoteActuator): Response<Boolean>
+    @PUT("remote_actuators/centralId={uid}")
+    @FormUrlEncoded
+    suspend fun setRemoteActuator(@Path("uid") uid: String, @Field("jsonNode") node: String): Response<RetrofitResult>
 
-    suspend fun deleteRemoteActuator(node: RemoteActuator): Response<Boolean>
+    @PUT("remote_actuators/value")
+    @FormUrlEncoded
+    suspend fun setRemoteActuatorValue(@Field("id") id: Int, @Field("value") value: Int): Response<RetrofitResult>
+
+    @DELETE("remote_actuators/centralId={uid}")
+    @FormUrlEncoded
+    suspend fun deleteRemoteActuator(@Field("nodeId") nodeId: Int): Response<RetrofitResult>
 
 
     @GET("/remote_sensors/centralId={uid}")
     suspend fun getRemoteSensorsByCentral(@Path("uid") uid: String): Response<ArrayList<RetrofitRemoteSensor>>
 
-    suspend fun createRemoteSensor(node: RemoteSensor): Response<Boolean>
+    suspend fun createRemoteSensor(node: RemoteSensor): Response<RetrofitResult>
 
-    suspend fun setRemoteSensor(node: RemoteSensor): Response<Boolean>
+    suspend fun setRemoteSensor(node: RemoteSensor): Response<RetrofitResult>
 
-    suspend fun deleteRemoteSensor(node: RemoteSensor): Response<Boolean>
+    @DELETE("remote_sensors/centralId={uid}")
+    @FormUrlEncoded
+    suspend fun deleteRemoteSensor(@Field("nodeId") nodeId: Int): Response<RetrofitResult>
 
 
     suspend fun getRemoteControlsByCentral(uid: String): Response<ArrayList<RetrofitControlFeedback>?>
 
-    suspend fun createRemoteControl(sensor: RemoteSensor, actuator: RemoteActuator, control: ControlFeedback): Response<Boolean>
+    suspend fun createRemoteControl(sensor: RemoteSensor, actuator: RemoteActuator, control: ControlFeedback): Response<RetrofitResult>
 
-    suspend fun setRemoteControl(control: ControlFeedback): Response<Boolean>
+    suspend fun setRemoteControl(control: ControlFeedback): Response<RetrofitResult>
 
-    suspend fun deleteRemoteControl(control: ControlFeedback): Response<Boolean>
+    suspend fun deleteRemoteControl(control: ControlFeedback): Response<RetrofitResult>
 }

@@ -134,6 +134,18 @@ class FirebaseNodesSource @Inject constructor(
         }
     }
 
+    override suspend fun setRemoteActuatorValue(node: RemoteActuator): MyResult<Boolean> {
+        return try {
+            val reference = db.collection(REMOTE_ACTUATORS).document(node.uid).set(node).await()
+
+            Log.d("FirebaseNodesSource", "Remote node modified with uid ${node.uid}")
+            MyResult.Success(true)
+        } catch (e: Exception) {
+            Log.w("FirebaseNodesSource", e)
+            MyResult.Failure(e)
+        }
+    }
+
     override suspend fun deleteRemoteActuator(node: RemoteActuator): MyResult<Boolean> {
         return try {
             val reference = db.collection(REMOTE_ACTUATORS).document(node.uid).delete().await()

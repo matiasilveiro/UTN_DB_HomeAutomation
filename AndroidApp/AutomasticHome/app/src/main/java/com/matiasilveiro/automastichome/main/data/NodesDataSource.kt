@@ -12,6 +12,7 @@ interface NodesDataSource {
     suspend fun getRemoteActuatorsByCentral(uid: String): MyResult<ArrayList<RemoteActuator>?>
     suspend fun createRemoteActuator(node: RemoteActuator): MyResult<Boolean>
     suspend fun setRemoteActuator(node: RemoteActuator): MyResult<Boolean>
+    suspend fun setRemoteActuatorValue(node: RemoteActuator): MyResult<Boolean>
     suspend fun deleteRemoteActuator(node: RemoteActuator): MyResult<Boolean>
 
     suspend fun getRemoteSensorsByCentral(uid: String): MyResult<ArrayList<RemoteSensor>?>

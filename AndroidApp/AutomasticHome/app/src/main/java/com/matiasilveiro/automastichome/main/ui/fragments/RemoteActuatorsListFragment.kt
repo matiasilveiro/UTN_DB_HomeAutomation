@@ -1,7 +1,6 @@
 package com.matiasilveiro.automastichome.main.ui.fragments
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -9,11 +8,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.matiasilveiro.automastichome.R
-import com.matiasilveiro.automastichome.core.ui.BaseViewState
 import com.matiasilveiro.automastichome.core.utils.exhaustive
 import com.matiasilveiro.automastichome.core.utils.snack
 import com.matiasilveiro.automastichome.databinding.FragmentRemoteActuatorsListBinding
@@ -22,6 +20,7 @@ import com.matiasilveiro.automastichome.main.ui.adapters.RemoteActuatorsAdapter
 import com.matiasilveiro.automastichome.main.ui.navigatorstates.RemoteActuatorsListNavigatorStates
 import com.matiasilveiro.automastichome.main.ui.viewmodels.RemoteActuatorsListViewModel
 import com.matiasilveiro.automastichome.main.ui.viewmodels.RemoteNodesListViewModel
+import com.matiasilveiro.automastichome.main.ui.viewstates.DataViewState
 
 class RemoteActuatorsListFragment : Fragment() {
 
@@ -39,6 +38,10 @@ class RemoteActuatorsListFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         _binding = FragmentRemoteActuatorsListBinding.inflate(layoutInflater)
         setHasOptionsMenu(true)
+
+        binding.swipeRefresh.setOnRefreshListener {
+            viewModel.refreshNodes()
+        }
 
         viewModel.setCentralNode(nodesViewModel.centralUid)
         viewModel.refreshNodes()
@@ -62,11 +65,12 @@ class RemoteActuatorsListFragment : Fragment() {
         }.exhaustive
     }
 
-    private fun handleViewStates(state: BaseViewState) {
+    private fun handleViewStates(state: DataViewState) {
         when(state) {
-            is BaseViewState.Ready -> { enableUI(true) }
-            is BaseViewState.Loading -> { enableUI(false) }
-            is BaseViewState.Failure -> { showMessage(getString(R.string.msg_error_default)) }
+            is DataViewState.Ready -> { enableUI(true) }
+            is DataViewState.Refreshing -> { enableUI(true) }
+            is DataViewState.Loading -> { enableUI(false) }
+            is DataViewState.Failure -> { showMessage(getString(R.string.msg_error_default)) }
         }.exhaustive
     }
 
@@ -76,11 +80,11 @@ class RemoteActuatorsListFragment : Fragment() {
 
     private fun enableUI(enable: Boolean) {
         if(enable) {
-            //binding.grayblur.visibility = View.GONE
-            //binding.progressLoader.visibility = View.GONE
+            binding.grayblur.visibility = View.GONE
+            binding.progressLoader.visibility = View.GONE
         } else {
-            //binding.grayblur.visibility = View.VISIBLE
-            //binding.progressLoader.visibility = View.VISIBLE
+            binding.grayblur.visibility = View.VISIBLE
+            binding.progressLoader.visibility = View.VISIBLE
         }
     }
 
@@ -90,7 +94,11 @@ class RemoteActuatorsListFragment : Fragment() {
 
         adapter.onClickListener = { viewModel.onNodeClicked(it) }
         adapter.onSwitchListener = { node, state ->
-            viewModel.onNodeSwitchToggled(node, state)
+            if(nodesViewModel.role < 2) {
+                viewModel.onNodeSwitchToggled(node, state)
+            } else {
+                showPermissionErrorDialog()
+            }
         }
 
         with(binding.recyclerView) {
@@ -98,6 +106,14 @@ class RemoteActuatorsListFragment : Fragment() {
             this.layoutManager = LinearLayoutManager(context)
             this.adapter = adapter
         }
+        binding.swipeRefresh.isRefreshing = false
     }
 
+    private fun showPermissionErrorDialog() {
+        MaterialAlertDialogBuilder(requireContext())
+                .setTitle("Permisos insuficientes")
+                .setMessage("No tienes permisos de interacción con los nodos remotos")
+                .setPositiveButton("Aceptar") { _, _ -> }
+                .show()
+    }
 }

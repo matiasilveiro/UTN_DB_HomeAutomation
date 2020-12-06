@@ -11,6 +11,9 @@ class ManageActuatorNodesUseCase (private val nodesRepository: NodesRepository) 
     suspend fun set(node: RemoteActuator): MyResult<Boolean> {
         return nodesRepository.setRemoteActuator(node)
     }
+    suspend fun setValue(node: RemoteActuator): MyResult<Boolean> {
+        return nodesRepository.setRemoteActuatorValue(node)
+    }
     suspend fun delete(node: RemoteActuator): MyResult<Boolean> {
         return nodesRepository.deleteRemoteActuator(node)
     }
