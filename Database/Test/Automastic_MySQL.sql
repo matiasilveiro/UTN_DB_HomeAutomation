@@ -38,7 +38,7 @@ CREATE TABLE `Users`
 CREATE TABLE `Roles`
 (
     `RoleId` INT NOT NULL AUTO_INCREMENT,
-    `UserId` INT NOT NULL,
+    `UserId` CHAR(50) NOT NULL,
     `NodeId` INT NOT NULL,
     `Role` INT NOT NULL,
     CONSTRAINT `PK_Roles` PRIMARY KEY  (`RoleId`)
@@ -110,9 +110,11 @@ CREATE TABLE `Control`
 /*******************************************************************************
    Create Foreign Keys
 ********************************************************************************/
+/*
 ALTER TABLE `Roles` ADD CONSTRAINT `FK_User`
     FOREIGN KEY (`UserId`) REFERENCES `Users` (`UserId`) ON DELETE NO ACTION;
 CREATE INDEX `IFK_UserRoleId` ON `Roles` (`UserId`);
+*/
 
 ALTER TABLE `Roles` ADD CONSTRAINT `FK_Node`
     FOREIGN KEY (`NodeId`) REFERENCES `Nodes_Central` (`NodeId`) ON DELETE NO ACTION;
@@ -153,17 +155,17 @@ INSERT INTO `Nodes_Central` (`Name`,`Address`,`Password`,`ImageUrl`) VALUES (N'C
 INSERT INTO `Nodes_Central` (`Name`,`Address`,`Password`,`ImageUrl`) VALUES (N'Oficina de Mana Digital',N'1234-5678-9014',N'password',N'https://images.pexels.com/photos/1170412/pexels-photo-1170412.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940');
 
 
-INSERT INTO `Roles` (`UserId`,`NodeId`,`Role`) VALUES (1,1,0);  /* Matias admin Departamento de Mati */
-INSERT INTO `Roles` (`UserId`,`NodeId`,`Role`) VALUES (2,1,1);  /* Sergio share  Departamento de Mati */
-INSERT INTO `Roles` (`UserId`,`NodeId`,`Role`) VALUES (3,1,2);  /* Roberto share  Departamento de Mati */
+INSERT INTO `Roles` (`UserId`,`NodeId`,`Role`) VALUES (N'fv3uTNta01e8d8ssA4MYM2RbLGE2',1,0);  /* Matias admin Departamento de Mati */
+INSERT INTO `Roles` (`UserId`,`NodeId`,`Role`) VALUES (N'czWVEMTbFGVQyBYmDlgQpAGVYcm2',1,1);  /* Sergio share  Departamento de Mati */
+INSERT INTO `Roles` (`UserId`,`NodeId`,`Role`) VALUES (N'xM75CdZ1sjOxtee8GMVBq5f8wlG2',1,2);  /* Roberto share  Departamento de Mati */
 
-INSERT INTO `Roles` (`UserId`,`NodeId`,`Role`) VALUES (1,2,1);  /* Matias share Cabaña de Sergio */
-INSERT INTO `Roles` (`UserId`,`NodeId`,`Role`) VALUES (2,2,0);  /* Sergio admin Cabaña de Sergio */
-INSERT INTO `Roles` (`UserId`,`NodeId`,`Role`) VALUES (4,2,2);  /* Alejandro invite Cabaña de Sergio */
+INSERT INTO `Roles` (`UserId`,`NodeId`,`Role`) VALUES (N'fv3uTNta01e8d8ssA4MYM2RbLGE2',2,1);  /* Matias share Cabaña de Sergio */
+INSERT INTO `Roles` (`UserId`,`NodeId`,`Role`) VALUES (N'czWVEMTbFGVQyBYmDlgQpAGVYcm2',2,0);  /* Sergio admin Cabaña de Sergio */
+INSERT INTO `Roles` (`UserId`,`NodeId`,`Role`) VALUES (N'xM75CdZ1sjOxtee8GMVBq5f8wlG2',2,2);  /* Roberto invite Cabaña de Sergio */
 
-INSERT INTO `Roles` (`UserId`,`NodeId`,`Role`) VALUES (1,3,1);  /* Matias share Oficina de Mana Digital */
-INSERT INTO `Roles` (`UserId`,`NodeId`,`Role`) VALUES (3,3,2);  /* Roberto invite Oficina de Mana Digital */
-INSERT INTO `Roles` (`UserId`,`NodeId`,`Role`) VALUES (4,3,0);  /* Alejandro admin Oficina de Mana Digital */
+INSERT INTO `Roles` (`UserId`,`NodeId`,`Role`) VALUES (N'fv3uTNta01e8d8ssA4MYM2RbLGE2',3,1);  /* Matias share Oficina de Mana Digital */
+INSERT INTO `Roles` (`UserId`,`NodeId`,`Role`) VALUES (N'czWVEMTbFGVQyBYmDlgQpAGVYcm2',3,2);  /* Sergio invite Oficina de Mana Digital */
+INSERT INTO `Roles` (`UserId`,`NodeId`,`Role`) VALUES (N'xM75CdZ1sjOxtee8GMVBq5f8wlG2',3,0);  /* Roberto admin Oficina de Mana Digital */
 
 
 INSERT INTO `Nodes_Actuator` (`CentralId`,`Name`,`Address`,`Status`,`Type`,`Value`,`ImageUrl`) VALUES (1,N'TV',N'0',N'Online',N'Light',1,N'https://images.pexels.com/photos/1201996/pexels-photo-1201996.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940');     /* Id = 1 */
@@ -192,7 +194,8 @@ INSERT INTO `Control` (`Name`,`ReferenceValue`,`ActionTrue`,`ActionFalse`,`Condi
 
 
 INSERT INTO `Sensor_Actuator` (`ActuatorId`,`SensorId`,`ActionId`) VALUES (4,1,1);
-INSERT INTO `Sensor_Actuator` (`ActuatorId`,`SensorId`,`ActionId`) VALUES (8,4,1);
+INSERT INTO `Sensor_Actuator` (`ActuatorId`,`SensorId`,`ActionId`) VALUES (7,4,1);
+INSERT INTO `Sensor_Actuator` (`ActuatorId`,`SensorId`,`ActionId`) VALUES (8,4,2);
 
 /*******************************************************************************
    Create users

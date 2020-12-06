@@ -64,13 +64,33 @@ UPDATE Nodes_Actuator SET Value = value WHERE NodeId = id;
 INSERT INTO Nodes_Actuator (CentralId, Name, Address, Status, Type, Value) VALUES (centralId, name, address, 'Online', type, 0);
 
 -- fun setRemoteActuatorName(id: Int, userId: Int, name: String)
--- In the server API is resolved if user can modify
+userIsAdmin(userId, id);
 UPDATE Nodes_Actuator SET Name = name WHERE NodeId = id;
 
 -- fun setRemoteActuatorPassword(id: Int, userId: Int, pswd: String)
--- In the server API is resolved if user can modify
+userIsAdmin(userId, id);
 UPDATE Nodes_Actuator SET Password = pswd WHERE NodeId = id;
 
--- fun deleteCentralNode(id: Int, userId: Int)
--- In the server API is resolved if user can delete
+-- fun deleteRemoteActuator(id: Int, userId: Int)
+userIsAdmin(userId, id);
 DELETE FROM Nodes_Actuator WHERE NodeId = id;
+
+
+/*******************************************************************************
+   Controls queries
+********************************************************************************/
+-- fun getControlsByCentralId(id: Int)
+SELECT * FROM Control WHERE ActionId IN (SELECT ActionId FROM Sensor_Actuator WHERE ActuatorId IN (SELECT NodeId FROM Nodes_Actuator WHERE CentralId = id));
+
+-- fun addControl(name: String, referenceValue: Int, actionTrueValue: Int, actionFalseValue: Int, condition: String)
+INSERT INTO Control (Name, ReferenceValue, ActionTrue, ActionFalse, Condition) VALUES (name, referenceValue, actionTrueValue, actionFalseValue, condition);
+
+-- fun assignControlWithActuatorSensor(controlId: Int, actuatorId: Int, sensorId: Int)
+INSERT INTO Sensor_Actuator (ActuatorId, SensorId, ActionId) VALUES (controlId, actuatorId, sensorId);
+
+-- fun unassignControlWithActuatorSensor(controlId: Int, actuatorId: Int, sensorId: Int)
+DELETE FROM Sensor_Actuator WHERE (ActionId = control Id) AND (ActuatorId = actuatorId) AND (SensorId = sensorId);
+
+-- fun deleteControl(controlId: Int)
+DELETE FROM Sensor_Actuator WHERE ActionId = controlId;
+DELETE FROM Control WHERE ActionId = controlId;
