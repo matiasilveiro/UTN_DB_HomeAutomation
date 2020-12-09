@@ -161,7 +161,7 @@ def setRemoteSensorValue():
 
 if __name__ == '__main__':
     context = ('server.crt', 'server.key')
-    app.run(host='192.168.56.1', debug=True, ssl_context=context)
+    app.run(host='192.168.56.1', ssl_context=context)
 
 # Certificate and key files generated with method 2:
 # https://kracekumar.com/post/54437887454/ssl-for-flask-local-development/
