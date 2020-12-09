@@ -15,6 +15,7 @@ import com.matiasilveiro.automastichome.core.utils.snack
 import com.matiasilveiro.automastichome.databinding.FragmentConnectToCentralBinding
 import com.matiasilveiro.automastichome.main.domain.CentralNode
 import com.matiasilveiro.automastichome.main.ui.navigatorstates.ConnectToCentralNavigatorStates
+import com.matiasilveiro.automastichome.main.ui.viewmodels.CentralNodesListViewModel
 import com.matiasilveiro.automastichome.main.ui.viewmodels.ConnectToCentralViewModel
 
 class ConnectToCentralFragment : Fragment() {
@@ -24,6 +25,7 @@ class ConnectToCentralFragment : Fragment() {
     }
 
     private val viewModel: ConnectToCentralViewModel by activityViewModels()
+    private val listViewModel: CentralNodesListViewModel by activityViewModels()
     private var _binding: FragmentConnectToCentralBinding? = null
     private val binding get() = _binding!!
 
@@ -103,8 +105,13 @@ class ConnectToCentralFragment : Fragment() {
     }
 
     private fun onDoneClicked() {
-        if(viewModel.node.value?.uid?.isNotEmpty() == true) {
-            viewModel.createRole(1)
+        val node = viewModel.node.value
+        if(node?.uid?.isNotEmpty() == true) {
+            if(node !in listViewModel.nodes.value!!) {
+                viewModel.createRole(1)
+            } else {
+                showMessage("Nodo asociado previamente")
+            }
         } else {
             showMessage("Por favor, buscar el nodo antes de agregarlo")
         }

@@ -96,6 +96,6 @@
     <fragment
         android:id="@+id/connectToCentralFragment"
         android:name="com.matiasilveiro.automastichome.main.ui.fragments.ConnectToCentralFragment"
-        android:label="fragment_connect_to_central"
+        android:label="@string/fragment_title_connecttocentral"
         tools:layout="@layout/fragment_connect_to_central" />
 </navigation>
