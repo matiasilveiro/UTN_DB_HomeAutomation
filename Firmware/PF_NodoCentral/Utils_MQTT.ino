@@ -11,6 +11,8 @@ PubSubClient client(espClient);
 long lastMsg = 0;
 char msg[50];
 int value = 0;
+String pubsubAddr = vendor_id + "/" + WiFi.macAddress() + "/";
+String databaseAddr = vendor_id + "/" + "db_broadcast" "/" + WiFi.macAddress() + "/";
 
 /**
  * @brief      Initializes MQTT client and sets up streaming callbacks
@@ -55,7 +57,7 @@ void callback(char* topic, byte* payload, unsigned int length)
     String topicStr = String(topic);
     
     // Por si tengo que responder a algun topic
-    char topicPub[40];
+    char topicPub[50];
     String topicPubStr;
     
     #ifdef DEBUG
@@ -78,36 +80,43 @@ void callback(char* topic, byte* payload, unsigned int length)
             Serial.println(payloadStr);
         #endif
         
-        if(configStr == "refresh")
+        if(configStr == "status")
         {
-            // Envio de direcciones de nodos
-            topicPubStr = vendor_id + "/" + factory_id + "/" + "config/node_ids";
-            topicPubStr.toCharArray(topicPub, 40);
-            client.publish(topicPub, "1,2,3,4");
-            
-            // Envio de status de nodos
-            topicPubStr = vendor_id + "/" + factory_id + "/" + "config/status";
-            topicPubStr.toCharArray(topicPub, 40);
-            client.publish(topicPub, "ON,OFF,ON,OFF");
-            
-            // Envio de tipos de nodos
-            topicPubStr = vendor_id + "/" + factory_id + "/" + "config/node_type";
-            topicPubStr.toCharArray(topicPub, 40);
-            client.publish(topicPub, "LUZ,PLUG,LUZ,PLUG");
+            String topicPubStr = databaseAddr + "status";
+            topicPubStr.toCharArray(topicPub, 50);
+            client.publish(topicPub, "Online");
         }
     } else {
-        int idx_node = topicStr.lastIndexOf("/");
-        String nodeStr = topicStr.substring(idx_node-1,idx_node);
-        
-        #ifdef DEBUG
-            Serial.print(">> Node address: ");
-            Serial.println(nodeStr);
-            Serial.print(">> Node value: ");
-            Serial.println(payloadStr);
-        #endif
-        
-        //digitalToggle(LED_BUILTIN);
-        tdaSerial.print("*" + nodeStr + "+" + payloadStr + "#");
+        int idx_set = topicStr.indexOf("set");
+        if(idx_set > -1) {
+          int idx_node = topicStr.lastIndexOf("/");
+          String nodeStr = topicStr.substring(idx_node-1,idx_node);
+          
+          #ifdef DEBUG
+              Serial.print(">> Node address: ");
+              Serial.println(nodeStr);
+              Serial.print(">> Node value: ");
+              Serial.println(payloadStr);
+          #endif
+          
+          //digitalToggle(LED_BUILTIN);
+          tdaSerial.print("*" + nodeStr + "+" + payloadStr + "#");
+          send_ack(nodeStr, true);
+        }
+    }
+}
+
+void send_ack(String node_addr, boolean state)
+{
+    char topicPub[50];
+    String topicPubStr;
+    
+    topicPubStr = databaseAddr + node_addr + "/" + "ack";
+    topicPubStr.toCharArray(topicPub, 50);
+    if(state) {
+      client.publish(topicPub, "ack");
+    } else {
+      client.publish(topicPub, "nack");
     }
 }
 
@@ -115,8 +124,8 @@ void callback(char* topic, byte* payload, unsigned int length)
 
 void reconnect() 
 {
-    char topicSub[40];
-    char topicPub[40];
+    char topicSub[50];
+    char topicPub[50];
     
     // Loop until we're reconnected
     while (!client.connected()) 
@@ -132,13 +141,13 @@ void reconnect()
             Serial.println("connected!");
             
             // Once connected, publish an announcement...
-            String topicPubStr = vendor_id + "/" + factory_id + "/" + "config/status";
-            topicPubStr.toCharArray(topicPub, 40);
-            client.publish(topicPub, "Online!");
+            String topicPubStr = databaseAddr + "status";
+            topicPubStr.toCharArray(topicPub, 50);
+            client.publish(topicPub, "Online");
             
             // ... and resubscribe
-            String topicSubStr = vendor_id + "/" + factory_id + "/" + "#";
-            topicSubStr.toCharArray(topicSub, 40);
+            String topicSubStr = pubsubAddr + "#";
+            topicSubStr.toCharArray(topicSub, 50);
             Serial.print("Subscribing to ");
             Serial.println(topicSub);
             Serial.println();
