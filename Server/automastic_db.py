@@ -72,6 +72,16 @@ def getCentralNodes():
         print(ex)
         return ""
 
+def getCentralNodesByAddr(addr: str):
+    try:
+        query = ("""SELECT Nodes_Central.NodeId, Name, Address, Password, Status, ImageUrl FROM Nodes_Central WHERE (Address = %s);""")
+        cursor.execute(query, (addr,))
+        result = cursor.fetchall()
+        return result
+    except Exception as ex:
+        print(ex)
+        return ""
+
 def getCentralNodesByUser(userId: int):
     try:
         query = ("""SELECT Nodes_Central.NodeId, Name, Address, Password, Status, ImageUrl, Roles.Role FROM Nodes_Central 
@@ -116,6 +126,19 @@ def deleteCentralNode(id: int):
     except Exception as ex:
         print(ex)
         return False
+
+
+def createCentralNodeRole(userId: str, centralId: str, role: int):
+    try:
+        query = ("""INSERT INTO Roles (`UserId`,`NodeId`,`Role`) VALUES (%s,%s,%s);""")
+        cursor.execute(query, (userId,centralId,role,))
+
+        return True
+    except Exception as ex:
+        print(ex)
+        return False
+
+
 
 
 #------------------------------------------------------------------------------------

@@ -53,6 +53,23 @@ class CentralNodeById(Resource):
             return Result('failure','operation failed').toJSON()
 
 
+@app.route('/central_nodes/nodeAddr=<addr>',methods=['GET'])
+def getCentralNodeByAddr(addr):
+    result = db.getCentralNodesByAddr(addr)
+    return jsonify(result)
+
+
+@app.route('/central_nodes/create_role',methods=['POST'])
+def createCentralNodeRole():
+    userId = request.form['userId']
+    centralId = request.form['centralId']
+    role = request.form['role']
+    result = db.createCentralNodeRole(userId, centralId, role)
+    if(result):
+        return Result('success','created successfully').toJSON()
+    else:
+        return Result('failure','operation failed').toJSON()
+
 #-------------------------------------------------------------------------
 
 
