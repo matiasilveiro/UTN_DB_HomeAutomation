@@ -73,13 +73,13 @@ void setup()
     //ticker.attach(1, WiFi_Status);
     //ticker1.attach(1, heartbeat);
     //ticker2.attach(7, TDA_Discover);
-    ticker3.attach(10, setRetryFlag);
+    //ticker3.attach(10, setRetryFlag);
 }
 
 void loop() 
 {
     // Mensaje entrante por TDA5051
-    TDA_Handle();
+    //TDA_Handle();
 
     MQTT_Loop();
 }
