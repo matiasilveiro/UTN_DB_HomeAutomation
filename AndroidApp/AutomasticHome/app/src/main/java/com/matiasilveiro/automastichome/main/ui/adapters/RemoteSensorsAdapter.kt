@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.matiasilveiro.automastichome.databinding.ItemRecyclerRemoteNodeBinding
+import com.matiasilveiro.automastichome.R
 import com.matiasilveiro.automastichome.databinding.ItemRecyclerRemoteSensorBinding
 import com.matiasilveiro.automastichome.main.domain.RemoteSensor
 import kotlin.properties.Delegates
@@ -40,12 +40,19 @@ class RemoteSensorsAdapter : RecyclerView.Adapter<RemoteSensorsAdapter.ViewHolde
 
         internal fun bind(value: RemoteSensor, listener: ((RemoteSensor) -> Unit)?) {
             binding.txtName.text = value.name
+            binding.txtStatus.text = value.status
             binding.txtUnit.text = value.unit
             binding.txtValue.text = value.value.toString()
             Glide.with(binding.root)
                 .load(value.imageUrl)
                 .centerCrop()
                 .into(binding.imageView)
+
+            val imageStatus = when(value.status) {
+                "Online" -> { R.drawable.circle_online }
+                else -> { R.drawable.circle_offline }
+            }
+            binding.imgStatus.setImageResource(imageStatus)
 
             binding.cardLayout.setOnClickListener {
                 listener?.invoke(value)
