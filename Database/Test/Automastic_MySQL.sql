@@ -50,6 +50,7 @@ CREATE TABLE `Nodes_Central`
     `Name` CHAR(50) NOT NULL,
     `Address` CHAR(50) NOT NULL,
     `Password` CHAR(50) NOT NULL,
+    `Status` CHAR(10),
     `ImageUrl` CHAR(120),
     CONSTRAINT `PK_Node` PRIMARY KEY  (`NodeId`)
 );
@@ -150,9 +151,9 @@ INSERT INTO `Users` (`Displayname`,`Email`,`Password`) VALUES (N'Roberto',N'robe
 INSERT INTO `Users` (`Displayname`,`Email`,`Password`) VALUES (N'Alejandro',N'alejandro@gmail.com',N'alejandro');
 
 
-INSERT INTO `Nodes_Central` (`Name`,`Address`,`Password`,`ImageUrl`) VALUES (N'Departamento de Mati',N'1234-5678-9012',N'password',N'https://images.pexels.com/photos/1267438/pexels-photo-1267438.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940');
-INSERT INTO `Nodes_Central` (`Name`,`Address`,`Password`,`ImageUrl`) VALUES (N'Cabaña de Sergio',N'1234-5678-9013',N'password',N'https://images.pexels.com/photos/463734/pexels-photo-463734.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260');
-INSERT INTO `Nodes_Central` (`Name`,`Address`,`Password`,`ImageUrl`) VALUES (N'Oficina de Mana Digital',N'1234-5678-9014',N'password',N'https://images.pexels.com/photos/1170412/pexels-photo-1170412.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940');
+INSERT INTO `Nodes_Central` (`Name`,`Address`,`Password`,`Status`,`ImageUrl`) VALUES (N'Departamento de Mati',N'30:AE:A4:40:AE:EC',N'password',N'Online',N'https://images.pexels.com/photos/1267438/pexels-photo-1267438.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940');
+INSERT INTO `Nodes_Central` (`Name`,`Address`,`Password`,`Status`,`ImageUrl`) VALUES (N'Cabaña de Sergio',N'1234-5678-9013',N'password',N'Online',N'https://images.pexels.com/photos/463734/pexels-photo-463734.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260');
+INSERT INTO `Nodes_Central` (`Name`,`Address`,`Password`,`Status`,`ImageUrl`) VALUES (N'Oficina de Mana Digital',N'1234-5678-9014',N'password',N'Online',N'https://images.pexels.com/photos/1170412/pexels-photo-1170412.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940');
 
 
 INSERT INTO `Roles` (`UserId`,`NodeId`,`Role`) VALUES (N'fv3uTNta01e8d8ssA4MYM2RbLGE2',1,0);  /* Matias admin Departamento de Mati */
