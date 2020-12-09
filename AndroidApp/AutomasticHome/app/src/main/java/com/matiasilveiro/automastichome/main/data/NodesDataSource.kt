@@ -5,9 +5,12 @@ import com.matiasilveiro.automastichome.main.domain.*
 
 interface NodesDataSource {
     suspend fun getCentralNodesByUser(uid: String): MyResult<ArrayList<CentralNode>?>
+    suspend fun getCentralNodesByAddress(address: String): MyResult<ArrayList<CentralNode>?>
     suspend fun createCentralNode(node: CentralNode): MyResult<Boolean>
     suspend fun setCentralNode(node: CentralNode): MyResult<Boolean>
     suspend fun deleteCentralNode(node: CentralNode): MyResult<Boolean>
+
+    suspend fun createCentralNodeRole(uid: String, address: String, role: Int): MyResult<Boolean>
 
     suspend fun getRemoteActuatorsByCentral(uid: String): MyResult<ArrayList<RemoteActuator>?>
     suspend fun createRemoteActuator(node: RemoteActuator): MyResult<Boolean>

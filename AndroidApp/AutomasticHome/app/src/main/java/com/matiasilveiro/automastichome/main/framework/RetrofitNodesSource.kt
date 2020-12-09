@@ -50,6 +50,31 @@ class RetrofitNodesSource : NodesDataSource {
         }
     }
 
+    override suspend fun getCentralNodesByAddress(address: String): MyResult<ArrayList<CentralNode>?> {
+        try {
+            val response = apiClient.getCentralNodesByAddress(address)
+            // Check if response was successful.
+            if (response.isSuccessful && response.body() != null) {
+                val data = response.body()!!
+                val result = data.map { it.toCentralNode() }
+
+                result.forEach {
+                    Log.d("RetrofitNodesSource", "Node retrieved with name ${it.name}")
+                }
+
+                return MyResult.Success(ArrayList(result))
+            } else {
+                // Show API error.
+                Log.d("Retrofit", "Error occurred: ${response.message()}")
+                return MyResult.Success(arrayListOf())
+            }
+        } catch (e: Exception) {
+            // Show API error. This is the error raised by the client.
+            Log.d("Retrofit", "Error occurred: ${e.message}")
+            return MyResult.Failure(e)
+        }
+    }
+
     override suspend fun createCentralNode(node: CentralNode): MyResult<Boolean> {
         TODO("Not yet implemented")
     }
@@ -77,6 +102,27 @@ class RetrofitNodesSource : NodesDataSource {
 
     override suspend fun deleteCentralNode(node: CentralNode): MyResult<Boolean> {
         TODO("Not yet implemented")
+    }
+
+    override suspend fun createCentralNodeRole(uid: String, centralId: String, role: Int): MyResult<Boolean> {
+        try {
+            val response = apiClient.createCentralNodeRole(uid, centralId, role)
+            // Check if response was successful.
+            if (response.isSuccessful && response.body() != null) {
+                val data = response.body()!!
+                Log.d("RetrofitNodesSource", "Node created, ${data.status}, ${data.message}")
+
+                return MyResult.Success(true)
+            } else {
+                // Show API error.
+                Log.d("Retrofit", "Error occurred: ${response.message()}")
+                return MyResult.Success(false)
+            }
+        } catch (e: Exception) {
+            // Show API error. This is the error raised by the client.
+            Log.d("Retrofit", "Error occurred: ${e.message}")
+            return MyResult.Failure(e)
+        }
     }
 
     override suspend fun getRemoteActuatorsByCentral(uid: String): MyResult<ArrayList<RemoteActuator>?> {

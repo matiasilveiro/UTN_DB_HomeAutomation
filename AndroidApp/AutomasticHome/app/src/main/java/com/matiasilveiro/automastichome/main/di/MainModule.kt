@@ -57,6 +57,11 @@ object MainModule {
     }
 
     @Provides
+    fun provideCreateCentralRoleUseCase(repository: NodesRepository): CreateCentralNodeRoleUseCase {
+        return CreateCentralNodeRoleUseCase(repository)
+    }
+
+    @Provides
     fun provideManageActuatorNodesUseCase(repository: NodesRepository): ManageActuatorNodesUseCase {
         return ManageActuatorNodesUseCase(repository)
     }

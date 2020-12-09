@@ -5,7 +5,7 @@
         android:icon="@drawable/ic_add"
         android:title="Agregar nodo central" />
     <item
-        android:id="@+id/connectToCentralNode"
+        android:id="@+id/connectToCentralFragment"
         android:icon="@drawable/ic_connect"
         android:title="Conectar a nodo central" />
     <item

@@ -14,4 +14,7 @@ class ManageCentralNodeUseCase (private val nodesRepository: NodesRepository) {
     suspend fun delete(node: CentralNode): MyResult<Boolean> {
         return nodesRepository.deleteCentralNode(node)
     }
+    suspend fun search(address: String): MyResult<ArrayList<CentralNode>?> {
+        return nodesRepository.getCentralNodesByAddress(address)
+    }
 }

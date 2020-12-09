@@ -25,6 +25,18 @@ class FirebaseNodesSource @Inject constructor(
         const val CONTROL = "ControlFeedback"
     }
 
+    override suspend fun getCentralNodesByAddress(address: String): MyResult<ArrayList<CentralNode>?> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun createCentralNodeRole(
+        uid: String,
+        address: String,
+        role: Int
+    ): MyResult<Boolean> {
+        TODO("Not yet implemented")
+    }
+
     override suspend fun getCentralNodesByUser(uid: String): MyResult<ArrayList<CentralNode>?> {
          try {
             val documents = db.collection(ROLES).whereEqualTo("userUid",uid).get().await()

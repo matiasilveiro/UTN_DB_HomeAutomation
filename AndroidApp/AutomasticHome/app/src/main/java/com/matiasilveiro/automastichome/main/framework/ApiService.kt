@@ -13,7 +13,14 @@ interface ApiService {
     @GET("/central_nodes/userId={uid}")
     suspend fun getCentralNodesByUser(@Path("uid") uid: String): Response<ArrayList<RetrofitCentralNode>>
 
+    @GET("/central_nodes/nodeAddr={addr}")
+    suspend fun getCentralNodesByAddress(@Path("addr") address: String): Response<ArrayList<RetrofitCentralNode>>
+
     suspend fun createCentralNode(node: CentralNode): Response<RetrofitResult>
+
+    @POST("central_nodes/create_role")
+    @FormUrlEncoded
+    suspend fun createCentralNodeRole(@Field("userId") userId: String, @Field("centralId") centralId: String, @Field("role") role: Int): Response<RetrofitResult>
 
     @PUT("/central_nodes/userId={uid}")
     @FormUrlEncoded

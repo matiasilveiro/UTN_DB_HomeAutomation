@@ -17,8 +17,16 @@ class NodesRepository @Inject constructor(
         return source.getCentralNodesByUser(uid)
     }
 
+    override suspend fun getCentralNodesByAddress(address: String): MyResult<ArrayList<CentralNode>?> {
+        return source.getCentralNodesByAddress(address)
+    }
+
     override suspend fun createCentralNode(node: CentralNode): MyResult<Boolean> {
         return source.createCentralNode(node)
+    }
+
+    override suspend fun createCentralNodeRole(uid: String, address: String, role: Int): MyResult<Boolean> {
+        return source.createCentralNodeRole(uid,address,role)
     }
 
     override suspend fun setCentralNode(node: CentralNode): MyResult<Boolean> {
