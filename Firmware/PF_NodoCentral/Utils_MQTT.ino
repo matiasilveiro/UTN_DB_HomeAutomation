@@ -25,13 +25,13 @@ void MQTT_Init()
 
 
 /**
- * @brief      TODO
+ * @brief      Loops over MQTT client connection, and reconnects in case of failure
  */
 void MQTT_Loop()
 {
     // Reconexion del cliente MQTT
     if (!client.connected()) {
-        reconnect();
+        MQTT_Reconnect();
     }
     client.loop();
 }
@@ -42,12 +42,11 @@ void MQTT_Loop()
 
 
 /**
- * @brief      Recibe la informacion a transmitir y envia el codigo de hadamard
- *             correspondiente por serie al TDA.
+ * @brief      MQTT subscription callback.
  *
- * @param      data     Vector que tiene la informacion en los 5 bits menos
- *                      significativos de cada elemento.
- * @param[in]  DataLen  Cantidad de elementos que tienen informacion.
+ * @param      topic    The topic of the received message
+ *             payload  The incoming message
+ *             length   Length of the payload
  */
 void callback(char* topic, byte* payload, unsigned int length) 
 {
@@ -101,12 +100,19 @@ void callback(char* topic, byte* payload, unsigned int length)
           
           //digitalToggle(LED_BUILTIN);
           tdaSerial.print("*" + nodeStr + "+" + payloadStr + "#");
-          send_ack(nodeStr, true);
+          MQTT_sendAck(nodeStr, true);
         }
     }
 }
 
-void send_ack(String node_addr, boolean state)
+
+/**
+ * @brief      Sends a message acknowledged to the server.
+ *
+ * @param      node_addr  The address of the remote node
+ *             state      Sends ack if true, nack if false
+ */
+void MQTT_sendAck(String node_addr, boolean state)
 {
     char topicPub[50];
     String topicPubStr;
@@ -120,9 +126,48 @@ void send_ack(String node_addr, boolean state)
     }
 }
 
+
+/**
+ * @brief      Updates the status of the remote node in the server.
+ *
+ * @param      node_addr  The address of the remote node
+ *             state      Sends Online if true, Offline if false
+ */
+void MQTT_updateRemoteStatus(String node_addr, boolean state)
+{
+    char topicPub[50];
+    String topicPubStr;
+    
+    topicPubStr = databaseAddr + node_addr + "/" + "status";
+    topicPubStr.toCharArray(topicPub, 50);
+    if(state) {
+      client.publish(topicPub, "Online");
+    } else {
+      client.publish(topicPub, "Offline");
+    }
+}
+
+
+void MQTT_SimulateRemoteSensor(void)
+{
+    char topicPub[50];
+    char messagePub[10];
+    String topicPubStr;
+    long measure = random(20,40);
+    
+    topicPubStr = databaseAddr + "0" + "/" + "value";
+    topicPubStr.toCharArray(topicPub, 50);
+    String(measure).toCharArray(messagePub, 10);
+    client.publish(topicPub, messagePub);
+}
+
 /* ------------------------------------------------------------------*/
 
-void reconnect() 
+
+/**
+ * @brief      Connects to MQTT broker, and subscribes to the node topic
+ */
+void MQTT_Reconnect() 
 {
     char topicSub[50];
     char topicPub[50];

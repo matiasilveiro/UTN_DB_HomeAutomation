@@ -74,6 +74,7 @@ void setup()
     //ticker1.attach(1, heartbeat);
     //ticker2.attach(7, TDA_Discover);
     //ticker3.attach(10, setRetryFlag);
+    ticker3.attach(5, MQTT_SimulateRemoteSensor);
 }
 
 void loop() 
