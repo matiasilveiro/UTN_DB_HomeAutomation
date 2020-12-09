@@ -71,6 +71,7 @@ class EditCentralNodeFragment : Fragment() {
                     binding.edtAdress.editText!!.text.toString(),
                     binding.edtPassword.editText!!.text.toString(),
                     "",
+                        "",
                     args.centralNode?.role ?: 0
                 )
                 viewModel.saveChanges(node)

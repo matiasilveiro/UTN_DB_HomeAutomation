@@ -10,8 +10,9 @@ class RetrofitCentralNode(
     @SerializedName("Name") val name: String,
     @SerializedName("Address") val address: String,
     @SerializedName("Password") val password: String,
+    @SerializedName("Status") val status: String,
     @SerializedName("ImageUrl") val imageUrl: String?,
     @SerializedName("Role") var role: Int)
 
-fun RetrofitCentralNode.toCentralNode(): CentralNode = CentralNode(uid,name,address,password,imageUrl?:"",role)
-fun CentralNode.toRetrofitCentralNode(): RetrofitCentralNode = RetrofitCentralNode(uid,name,address,password,imageUrl,role)
+fun RetrofitCentralNode.toCentralNode(): CentralNode = CentralNode(uid,name,address,password,status,imageUrl?:"",role)
+fun CentralNode.toRetrofitCentralNode(): RetrofitCentralNode = RetrofitCentralNode(uid,name,address,password,status,imageUrl,role)

@@ -5,6 +5,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.matiasilveiro.automastichome.R
+import com.matiasilveiro.automastichome.core.utils.disable
 import com.matiasilveiro.automastichome.databinding.ItemRecyclerCentralNodeBinding
 import com.matiasilveiro.automastichome.main.domain.CentralNode
 import kotlin.properties.Delegates
@@ -48,10 +50,21 @@ class CentralNodesAdapter : RecyclerView.Adapter<CentralNodesAdapter.ViewHolder>
 
         internal fun bind(value: CentralNode) {
             binding.textView.text = value.name
+            binding.txtStatus.text = value.status
             Glide.with(binding.root)
                 .load(value.imageUrl)
                 .centerCrop()
                 .into(binding.imageView)
+
+            val imageStatus = when(value.status) {
+                "Online" -> {
+                    R.drawable.circle_online
+                }
+                else -> {
+                    R.drawable.circle_offline
+                }
+            }
+            binding.imgStatus.setImageResource(imageStatus)
 
             binding.cardLayout.setOnClickListener {
                 onClickListener?.invoke(value)
