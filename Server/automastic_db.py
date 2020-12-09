@@ -6,6 +6,16 @@ import defs
 import json
 import atexit
 
+import time
+from apscheduler.schedulers.background import BackgroundScheduler
+
+#--------------------------------
+# Job dispatcher
+
+sched = BackgroundScheduler()
+sched.start()
+
+
 #--------------------------------
 # MySQL connector and cursor
 
@@ -22,23 +32,24 @@ cursor = db.cursor(dictionary=True)
 # MQTT Client and connection
 
 def on_mqtt_message(client, userdata, message):
-    print("message received " ,str(message.payload.decode("utf-8")))
-    print("message topic=",message.topic)
-    print("message qos=",message.qos)
-    print("message retain flag=",message.retain)
+    #print("message received " ,str(message.payload.decode("utf-8")))
+    #print("message topic=",message.topic)
+    #print("message qos=",message.qos)
+    #print("message retain flag=",message.retain)
+    decodeMqttMessage( message.topic, str(message.payload.decode("utf-8")) )
 
 def on_mqtt_log(client, userdata, level, buf):
     print("log: ",buf)
 
 
-client = mqtt.Client("Automastic MQTT")
+client = mqtt.Client()
 client.on_message = on_mqtt_message
 #client.on_log=on_mqtt_log
 client.connect(defs.BROKER)
 
+client.subscribe(topic='utn_pf/db_broadcast/#')
+#client.publish(topic='utn_pf/30:AE:A4:40:AE:EC/refresh',payload='Hello world!')
 client.loop_start()
-client.subscribe(topic='utn_pf/#')
-
 
 
 @atexit.register
@@ -46,13 +57,24 @@ def closeAutomasticDB():
     cursor.close()
     db.close()
     client.loop_stop()
+    sched.shutdown()
 
 
 #------------------------------------------------------------------------------------
 
+def getCentralNodes():
+    try:
+        query = ("""SELECT * FROM Nodes_Central;""")
+        cursor.execute(query)
+        result = cursor.fetchall()
+        return result
+    except Exception as ex:
+        print(ex)
+        return ""
+
 def getCentralNodesByUser(userId: int):
     try:
-        query = ("""SELECT Nodes_Central.NodeId, Name, Address, Password, ImageUrl, Roles.Role FROM Nodes_Central 
+        query = ("""SELECT Nodes_Central.NodeId, Name, Address, Password, Status, ImageUrl, Roles.Role FROM Nodes_Central 
                     JOIN Roles ON (Nodes_Central.NodeId = Roles.NodeId) AND (Roles.UserId = %s);"""
                 )
         cursor.execute(query, (userId,))
@@ -61,6 +83,16 @@ def getCentralNodesByUser(userId: int):
     except Exception as ex:
         print(ex)
         return ""
+    
+def setCentralNodeStatus(address: str, status: str):
+    try:
+        query = ("""UPDATE Nodes_Central SET Status = %s WHERE Address = %s;""")
+        cursor.execute(query, (status,address,))
+
+        return True
+    except Exception as ex:
+        print(ex)
+        return False
 
 def setCentralNode(node: str):
     try:
@@ -123,8 +155,14 @@ def setRemoteActuatorValue(id: int, value: int):
     try:
         query = ("""UPDATE Nodes_Actuator SET Value = %s WHERE NodeId = %s;""")
         cursor.execute(query, (value,id,))
-        topic = 'utn_pf/centralAddress/{}/value'.format(str(id))
-        client.publish(topic=topic, payload=str(value), qos=2)
+
+        query = ("""SELECT Nodes_Actuator.Address as RemoteAddress, Nodes_Central.Address as CentralAddress, Value FROM Nodes_Actuator
+                LEFT JOIN Nodes_Central ON (Nodes_Actuator.CentralId = Nodes_Central.NodeId) WHERE (Nodes_Actuator.NodeId = %s);""")
+        cursor.execute(query, (id,))
+        result = cursor.fetchall()
+        node = result[0]
+        topic = 'utn_pf/{}/{}/set'.format(node['CentralAddress'],node['RemoteAddress'])
+        client.publish(topic=topic, payload=node['Value'], qos=2)
 
         return True
     except Exception as ex:
@@ -200,3 +238,31 @@ def deleteRemoteSensor(id: int):
 
 
 #------------------------------------------------------------------------------------
+
+def decodeMqttMessage(topic: str, msg: str):
+    print(topic)
+    topic = topic.split('/')
+    central_node = topic[2]
+    field = topic[3]
+    print('DecodeMQTT: {}, {}: {}'.format(central_node,field,msg))
+    if(field == 'status'):
+        setCentralNodeStatus(central_node, msg)
+
+
+def sendMqttStatusRequest(centralAddress: str):
+    topic = 'utn_pf/{}/config/status'.format(centralAddress,)
+    client.publish(topic=topic, payload='dummy', qos=2)
+    print(topic)
+
+
+#------------------------------------------------------------------------------------
+
+
+@sched.scheduled_job('interval',seconds=5)
+def timed_job_status():
+    print('\n>> Updating central nodes status')
+    nodes_list = getCentralNodes()
+    for node in nodes_list:
+        #print("Node: {}".format(node))
+        setCentralNodeStatus(node['NodeId'], 'Offline')
+        sendMqttStatusRequest(node['Address'])
