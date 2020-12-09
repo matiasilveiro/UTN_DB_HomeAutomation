@@ -225,6 +225,15 @@ def setRemoteSensorValue(id: int, value: int):
         print(ex)
         return False
 
+def setRemoteSensorValueByAddr(addr: int, value: int):
+    try:
+        query = ("""UPDATE Nodes_Sensor SET Value = %s WHERE Address = %s;""")
+        cursor.execute(query, (value,addr,))
+
+        return True
+    except Exception as ex:
+        print(ex)
+        return False
 
 def deleteRemoteSensor(id: int):
     try:
@@ -244,15 +253,21 @@ def decodeMqttMessage(topic: str, msg: str):
     topic = topic.split('/')
     central_node = topic[2]
     field = topic[3]
-    print('DecodeMQTT: {}, {}: {}'.format(central_node,field,msg))
+    #print('DecodeMQTT: {}, {}: {}'.format(central_node,field,msg))
+
     if(field == 'status'):
         setCentralNodeStatus(central_node, msg)
+    elif(field.isdigit()):
+        remote_node = field
+        field = topic[4]
+        setRemoteSensorValueByAddr(int(remote_node), int(msg))
+
+
 
 
 def sendMqttStatusRequest(centralAddress: str):
-    topic = 'utn_pf/{}/config/status'.format(centralAddress,)
+    topic = 'utn_pf/{}/config/status'.format(centralAddress)
     client.publish(topic=topic, payload='dummy', qos=2)
-    print(topic)
 
 
 #------------------------------------------------------------------------------------
@@ -264,5 +279,5 @@ def timed_job_status():
     nodes_list = getCentralNodes()
     for node in nodes_list:
         #print("Node: {}".format(node))
-        setCentralNodeStatus(node['NodeId'], 'Offline')
+        setCentralNodeStatus(node['Address'], 'Offline')
         sendMqttStatusRequest(node['Address'])
