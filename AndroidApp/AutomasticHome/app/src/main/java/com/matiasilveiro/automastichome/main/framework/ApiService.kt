@@ -60,12 +60,18 @@ interface ApiService {
     @FormUrlEncoded
     suspend fun deleteRemoteSensor(@Field("nodeId") nodeId: Int): Response<RetrofitResult>
 
+    @GET("/controls/centralId={uid}")
+    suspend fun getRemoteControlsByCentral(@Path("uid") uid: String): Response<ArrayList<RetrofitControlFeedback>?>
 
-    suspend fun getRemoteControlsByCentral(uid: String): Response<ArrayList<RetrofitControlFeedback>?>
-
-    suspend fun createRemoteControl(sensor: RemoteSensor, actuator: RemoteActuator, control: ControlFeedback): Response<RetrofitResult>
+    @POST("controls/new")
+    @FormUrlEncoded
+    suspend fun createRemoteControl(@Field("actuatorId") actuatorId: Int, @Field("sensorId") sensorId: Int, @Field("jsonControl") control: String): Response<RetrofitResult>
 
     suspend fun setRemoteControl(control: ControlFeedback): Response<RetrofitResult>
 
     suspend fun deleteRemoteControl(control: ControlFeedback): Response<RetrofitResult>
+
+    @POST("controls/bind")
+    @FormUrlEncoded
+    suspend fun bindRemoteControl(@Field("controlId") controlId: Int, @Field("actuatorId") actuatorId: Int, @Field("sensorId") sensorId: Int): Response<RetrofitResult>
 }

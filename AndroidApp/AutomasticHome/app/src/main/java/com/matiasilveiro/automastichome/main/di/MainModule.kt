@@ -55,6 +55,10 @@ object MainModule {
     fun provideGetRemoteNodesUseCase(repository: NodesRepository): GetRemoteNodesUseCase {
         return GetRemoteNodesUseCase(repository)
     }
+    @Provides
+    fun provideGetControlsUseCase(repository: NodesRepository): GetControlsUseCase {
+        return GetControlsUseCase(repository)
+    }
 
     @Provides
     fun provideCreateCentralRoleUseCase(repository: NodesRepository): CreateCentralNodeRoleUseCase {
@@ -74,5 +78,10 @@ object MainModule {
     @Provides
     fun provideManageSensorNodesUseCase(repository: NodesRepository): ManageSensorNodesUseCase {
         return ManageSensorNodesUseCase(repository)
+    }
+
+    @Provides
+    fun provideManageControlsUseCase(repository: NodesRepository): ManageControlsUseCase {
+        return ManageControlsUseCase(repository)
     }
 }

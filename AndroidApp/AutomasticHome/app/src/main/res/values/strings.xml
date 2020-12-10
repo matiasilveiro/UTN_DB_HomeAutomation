@@ -9,6 +9,8 @@
     <string name="fragment_title_remotenodeedit">Editar dispositivo</string>
     <string name="fragment_title_centralnodeedit">Editar nodo central</string>
     <string name="fragment_title_connecttocentral">Conectar con nodo central</string>
+    <string name="fragment_title_controlslist">Controles automaticos</string>
+    <string name="fragment_title_controledit">Editar control automatico</string>
 
 
     <!-- SignInFragment layout strings -->

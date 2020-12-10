@@ -77,7 +77,7 @@
     <fragment
         android:id="@+id/controlsListFragment"
         android:name="com.matiasilveiro.automastichome.main.ui.fragments.ControlsListFragment"
-        android:label="fragment_controls_list"
+        android:label="@string/fragment_title_controlslist"
         tools:layout="@layout/fragment_controls_list" >
         <action
             android:id="@+id/action_controlsListFragment_to_newControlFragment"
@@ -91,8 +91,17 @@
     <fragment
         android:id="@+id/newControlFragment"
         android:name="com.matiasilveiro.automastichome.main.ui.fragments.NewControlFragment"
-        android:label="fragment_new_control"
-        tools:layout="@layout/fragment_new_control" />
+        android:label="@string/fragment_title_controledit"
+        tools:layout="@layout/fragment_new_control" >
+        <argument
+            android:name="control"
+            app:argType="com.matiasilveiro.automastichome.main.domain.ControlFeedback"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <argument
+            android:name="centralUid"
+            app:argType="string" />
+    </fragment>
     <fragment
         android:id="@+id/connectToCentralFragment"
         android:name="com.matiasilveiro.automastichome.main.ui.fragments.ConnectToCentralFragment"
