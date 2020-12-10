@@ -7,6 +7,7 @@
     #include <WiFiClient.h>
     #include <FirebaseESP32.h>
     #include <PubSubClient.h>
+    #include <ArduinoJson.h>
     #include <HardwareSerial.h>
     #include <Ticker.h>
     #include "EEPROM.h"

@@ -14,6 +14,20 @@ int value = 0;
 String pubsubAddr = vendor_id + "/" + WiFi.macAddress() + "/";
 String databaseAddr = vendor_id + "/" + "db_broadcast" "/" + WiFi.macAddress() + "/";
 
+typedef struct {
+  int actuatorAddr;
+  int sensorAddr;
+  int refValue;
+  String condition;
+  int actionTrue;
+  int actionFalse;
+} Control;
+
+Control controlList[4];
+int controlQty = 0;
+
+DynamicJsonDocument doc(1024);
+
 /**
  * @brief      Initializes MQTT client and sets up streaming callbacks
  */
@@ -21,6 +35,11 @@ void MQTT_Init()
 {
     client.setServer(mqtt_server, mqtt_port);
     client.setCallback(callback);
+
+    pinMode(4, OUTPUT);
+    pinMode(5, OUTPUT);
+    pinMode(19,OUTPUT);
+    pinMode(22,OUTPUT);
 }
 
 
@@ -88,19 +107,35 @@ void callback(char* topic, byte* payload, unsigned int length)
     } else {
         int idx_set = topicStr.indexOf("set");
         if(idx_set > -1) {
-          int idx_node = topicStr.lastIndexOf("/");
-          String nodeStr = topicStr.substring(idx_node-1,idx_node);
-          
-          #ifdef DEBUG
-              Serial.print(">> Node address: ");
-              Serial.println(nodeStr);
-              Serial.print(">> Node value: ");
-              Serial.println(payloadStr);
-          #endif
-          
-          //digitalToggle(LED_BUILTIN);
-          tdaSerial.print("*" + nodeStr + "+" + payloadStr + "#");
-          MQTT_sendAck(nodeStr, true);
+            int idx_node = topicStr.lastIndexOf("/");
+            String nodeStr = topicStr.substring(idx_node-1,idx_node);
+            
+            #ifdef DEBUG
+                Serial.print(">> Node address: ");
+                Serial.println(nodeStr);
+                Serial.print(">> Node value: ");
+                Serial.println(payloadStr);
+            #endif
+            
+            //digitalToggle(LED_BUILTIN);
+            tdaSerial.print("*" + nodeStr + "+" + payloadStr + "#");
+            MQTT_sendAck(nodeStr, true);
+            MQTT_setDebugLED(nodeStr, payloadStr);
+        } else {
+            int idx_set = topicStr.indexOf("controls");
+            if(idx_set > -1) {
+                int idx_action = topicStr.lastIndexOf("/");
+                String action = topicStr.substring(idx_action+1);
+                deserializeJson(doc, payloadStr);
+                String controlName = doc["Name"];
+                
+                #ifdef DEBUG
+                    Serial.print(">> Control query: ");
+                    Serial.println(action);
+                    Serial.print(">> Control name: ");
+                    Serial.println(controlName);
+                #endif
+            }
         }
     }
 }
@@ -124,6 +159,17 @@ void MQTT_sendAck(String node_addr, boolean state)
     } else {
       client.publish(topicPub, "nack");
     }
+}
+
+
+void MQTT_fetchControls() 
+{
+    char topicPub[50];
+    String topicPubStr;
+    
+    topicPubStr = databaseAddr + "get";
+    topicPubStr.toCharArray(topicPub, 50);
+    client.publish(topicPub, "controls");
 }
 
 
@@ -197,6 +243,8 @@ void MQTT_Reconnect()
             Serial.println(topicSub);
             Serial.println();
             client.subscribe(topicSub);
+
+            MQTT_fetchControls();
         } else {
             Serial.print("failed, rc=");
             Serial.print(client.state());
@@ -204,4 +252,18 @@ void MQTT_Reconnect()
             delay(5000);
         }
     }
+}
+
+
+void MQTT_setDebugLED(String led, String state)
+{
+  uint8_t pinState = LOW;
+  if(state == "1") {
+    pinState = HIGH;
+  }
+
+  if(led == "0") digitalWrite(4, pinState);
+  if(led == "1") digitalWrite(5, pinState);
+  if(led == "2") digitalWrite(19,pinState);
+  if(led == "3") digitalWrite(22,pinState);
 }
