@@ -245,20 +245,6 @@ def createRemoteSensor(node: str, centralAddr: str = ""):
         print(ex)
         return False
 
-def createRemoteActuator(node: str, centralAddr: str = ""):
-    try:
-        if(len(centralAddr) > 0):
-            centralNode = getCentralNodesByAddr(centralAddr)[0]
-        else:
-            centralNode = node['centralId']
-            node = json.loads(node)
-        query = ("""INSERT INTO Nodes_Actuator (CentralId, Name, Address, ImageUrl, Status, Type, Value) VALUES (%s, %s, %s, %s, %s, %s, %s);""")
-        cursor.execute(query, (centralNode['NodeId'],node['name'],node['address'],node['imageUrl'],node['status'],node['type'],int(node['value']),))
-
-        return True
-    except Exception as ex:
-        print(ex)
-        return False
 
 def setRemoteSensor(node: str):
     try:
@@ -305,6 +291,67 @@ def deleteRemoteSensor(id: int):
 
 #------------------------------------------------------------------------------------
 
+def getControlsByCentralId(centralId: int):
+    query = ("""SELECT * FROM Control WHERE ActionId IN (SELECT ActionId FROM Sensor_Actuator WHERE ActuatorId IN (SELECT NodeId FROM Nodes_Actuator WHERE CentralId = %s));""")
+    
+    cursor.execute(query, (centralId,))
+    result = cursor.fetchall()
+    return result
+
+def getControlsByCentralAddr(centralAddr: str):
+    query = ("""SELECT * FROM Control WHERE ActionId IN (SELECT ActionId FROM Sensor_Actuator WHERE ActuatorId IN (SELECT NodeId FROM Nodes_Actuator WHERE CentralId IN (SELECT NodeId FROM Nodes_Central WHERE Address = %s)));""")
+    
+    cursor.execute(query, (centralAddr,))
+    result = cursor.fetchall()
+    return result
+
+def setControl(controL: str):
+    try:
+        # TODO
+        return True
+    except Exception as ex:
+        print(ex)
+        return False
+
+def createControl(control: str, actuatorId: int, sensorId: int):
+    try:
+        control = json.loads(control)
+        query = ("""INSERT INTO Control (Name, ReferenceValue, ActionTrue, ActionFalse, `Condition`) VALUES (%s, %s, %s, %s, %s);""")
+        cursor.execute(query, (control['name'],int(control['referenceValue']),int(control['actionTrue']),int(control['actionFalse']),control['condition'],))
+
+        query = ("""INSERT INTO Sensor_Actuator (ActuatorId,SensorId,ActionId) VALUES (%s,%s,LAST_INSERT_ID());""")
+        cursor.execute(query, (actuatorId,sensorId,))
+
+        return True
+    except Exception as ex:
+        print(ex)
+        return False
+
+
+def assignControlWithActuatorSensor(controlId: int, actuatorId: int, sensorId: int):
+    try:
+        query = ("""INSERT INTO Sensor_Actuator (ActuatorId, SensorId, ActionId) VALUES (%s, %s, %s);""")
+        cursor.execute(query, (controlId,sensorId,actuatorId,))
+
+        return True
+    except Exception as ex:
+        print(ex)
+        return False
+
+
+def unassignControlWithActuatorSensor(controlId: int, actuatorId: int, sensorId: int):
+    try:
+        query = ("""DELETE FROM Sensor_Actuator WHERE (ActionId = %s) AND (ActuatorId = %s) AND (SensorId = %s);""")
+        cursor.execute(query, (controlId,actuatorId,sensorId,))
+
+        return True
+    except Exception as ex:
+        print(ex)
+        return False
+
+
+#------------------------------------------------------------------------------------
+
 def decodeMqttMessage(topic: str, msg: str):
     print(topic)
     topic = topic.split('/')
@@ -314,6 +361,7 @@ def decodeMqttMessage(topic: str, msg: str):
 
     if(field == 'status'):
         setCentralNodeStatus(central_node, msg)
+    
     elif(field == 'new'):
         node = json.loads(msg)
         nodeType = node['type']
@@ -327,6 +375,18 @@ def decodeMqttMessage(topic: str, msg: str):
         else:
             print("New sensor: {} at addr {}".format(node['name'], node['address']))
             createRemoteActuator(node, central_node)
+    
+    elif(field == 'get'):
+        query = msg
+        if(query == 'controls'):
+            controls = getControlsByCentralAddr(central_node)
+            print(controls)
+            topic = 'utn_pf/{}/controls/list'.format(central_node)
+            for control in controls:
+                msg = json.dumps(control)
+                client.publish(topic=topic, payload=msg, qos=2)
+            
+    
     elif(field.isdigit()):
         remote_node = field
         field = topic[4]

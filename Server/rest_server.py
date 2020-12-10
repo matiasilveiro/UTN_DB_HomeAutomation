@@ -176,6 +176,60 @@ def setRemoteSensorValue():
 #-------------------------------------------------------------------------
 
 
+@api.resource('/controls/centralId=<centralId>')
+class ControlsByCentral(Resource):
+    def get(self, centralId):
+        result = db.getControlsByCentralId(centralId)
+        return jsonify(result)
+
+    def put(self, centralId):
+        jsonControl = request.form['jsonControl']
+        result = db.setControl(jsonControl)
+        if(result):
+            return Result('success','created successfully').toJSON()
+        else:
+            return Result('failure','operation failed').toJSON()
+    
+    def delete(self, centralId):
+        id = int(request.form['nodeId'])
+        result = db.deleteRemoteActuator(id)
+        if(result):
+            return Result('success','created successfully').toJSON()
+        else:
+            return Result('failure','operation failed').toJSON()
+
+
+@app.route('/controls/new',methods=['POST'])
+def createControl():
+    jsonControl = request.form['jsonControl']
+    actuatorId = request.form['actuatorId']
+    sensorId = request.form['sensorId']
+    result = db.createControl(jsonControl,actuatorId,sensorId)
+    if(result):
+        return Result('success','created successfully').toJSON()
+    else:
+        return Result('failure','operation failed').toJSON()
+
+
+@app.route('/controls/bind',methods=['POST'])
+def bindControl():
+    controlId = request.form['controlId']
+    actuatorId = request.form['actuatorId']
+    sensorId = request.form['sensorId']
+    bind = request.form['bind']
+    if(bind):
+        result = db.assignControlWithActuatorSensor(controlId,actuatorId,sensorId)
+    else:
+        result = db.unassignControlWithActuatorSensor(controlId,actuatorId,sensorId)
+    if(result):
+        return Result('success','created successfully').toJSON()
+    else:
+        return Result('failure','operation failed').toJSON()
+
+
+#-------------------------------------------------------------------------
+
+
 if __name__ == '__main__':
     context = ('server.crt', 'server.key')
     app.run(host='192.168.56.1', ssl_context=context)
