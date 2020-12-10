@@ -10,7 +10,9 @@ Este repositorio cuenta con:
 - El diagrama entidad-relación de la base de datos del proyecto Automastic.
 - La secuencia SQL de generación de una BD de prueba.
 
+
 ![BlockDiagram](./Resources/BlockDiagram.png)
+
 
 ## Aplicación Android:
 Desarrollada en Android Studio, siguiendo el patrón de diseño MVVM y Clean Architecture. 
@@ -18,7 +20,9 @@ Desarrollada en Android Studio, siguiendo el patrón de diseño MVVM y Clean Arc
 Cada usuario tiene su lista de nodos centrales asociados, con diferentes roles (administrador, usuario o invitado) y por ende diferente jerarquía de acción sobre el mismo. Al hacer click en un nodo, se mostrará la lista de actuadores y sensores que controla dicho nodo central. Por el momento, los actuadores son solamente ON-OFF, y los sensores muestran su valor como texto.
 
 A continuación se muestran un par de capturas de la aplicación:
+
 ![AndroidApp](./Resources/Screenshot_App.png)
+
 
 
 ## Base de datos SQL:
@@ -33,7 +37,9 @@ El diagrama entidad-relación fue pensado teniendo en cuenta los siguientes supu
  4. Sin embargo, entre el usuario y el nodo central existe una tabla intermedia que define el rol del usuario sobre ese nodo central (Admin, Share o Invited).
  5. Se dispone de una tabla adicional que define acciones automáticas sobre actuadores a partir de la medición de algún sensor, definibles los parámetros por los usuarios administradores.
 
+
 ![SQL_EntityRelationDiagram](./Resources/Screenshot_Database.png)
+
 
 ## Servidor:
 Está programado en Python, utilizando la librería Flask para generar un servidor y exponer una API REST para consultar la base de datos. Posee un conector con una base de datos MySQL local al servidor, y comunicación con los nodos centrales a través del protocolo de mensajería MQTT.
