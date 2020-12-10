@@ -82,6 +82,16 @@ def getCentralNodesByAddr(addr: str):
         print(ex)
         return ""
 
+def getCentralAddrByRemoteActuator(actuatorId: int):
+    try:
+        query = ("""SELECT Nodes_Central.Address FROM Nodes_Central WHERE NodeId IN (SELECT CentralId FROM Nodes_Actuator WHERE NodeId = %s);""")
+        cursor.execute(query, (actuatorId,))
+        result = cursor.fetchone()
+        return result
+    except Exception as ex:
+        print(ex)
+        return ""
+
 def getCentralNodesByUser(userId: int):
     try:
         query = ("""SELECT Nodes_Central.NodeId, Name, Address, Password, Status, ImageUrl, Roles.Role FROM Nodes_Central 
@@ -322,6 +332,13 @@ def createControl(control: str, actuatorId: int, sensorId: int):
         query = ("""INSERT INTO Sensor_Actuator (ActuatorId,SensorId,ActionId) VALUES (%s,%s,LAST_INSERT_ID());""")
         cursor.execute(query, (actuatorId,sensorId,))
 
+        central_node = getCentralAddrByRemoteActuator(actuatorId)
+        address = central_node['Address']
+        topic = 'utn_pf/{}/controls/new'.format(address)
+        msg = json.dumps(control)
+        print(topic, msg)
+        client.publish(topic=topic, payload=msg, qos=2)
+
         return True
     except Exception as ex:
         print(ex)
@@ -380,7 +397,6 @@ def decodeMqttMessage(topic: str, msg: str):
         query = msg
         if(query == 'controls'):
             controls = getControlsByCentralAddr(central_node)
-            print(controls)
             topic = 'utn_pf/{}/controls/list'.format(central_node)
             for control in controls:
                 msg = json.dumps(control)
