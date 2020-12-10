@@ -77,6 +77,7 @@ class CentralNodesListFragment : Fragment() {
             is DataViewState.Loading -> { enableUI(false) }
             is DataViewState.Failure -> {
                 enableUI(true)
+                binding.swipeRefresh.isRefreshing = false
                 showMessage(getString(R.string.msg_error_default)) }
         }.exhaustive
     }

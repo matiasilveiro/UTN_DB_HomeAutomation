@@ -1,6 +1,7 @@
 package com.matiasilveiro.automastichome.main.framework
 
 import okhttp3.OkHttpClient
+import java.util.concurrent.TimeUnit
 import javax.net.ssl.SSLContext
 import javax.net.ssl.TrustManager
 import javax.net.ssl.X509TrustManager
@@ -35,6 +36,9 @@ class UnsafeOkHttpClient {
                 builder.sslSocketFactory(sslSocketFactory, trustAllCerts[0] as X509TrustManager)
                 // builder.hostnameVerifier { _, _ -> true }
                 builder.hostnameVerifier { _, _ -> true }
+                builder.connectTimeout(5, TimeUnit.SECONDS)
+                builder.readTimeout(2, TimeUnit.SECONDS)
+                builder.writeTimeout(2, TimeUnit.SECONDS)
 
                 return builder.build()
             } catch (e: Exception) {

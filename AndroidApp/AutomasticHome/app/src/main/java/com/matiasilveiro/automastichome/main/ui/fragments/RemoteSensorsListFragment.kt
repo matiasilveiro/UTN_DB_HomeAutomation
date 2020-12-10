@@ -69,7 +69,10 @@ class RemoteSensorsListFragment : Fragment() {
             is DataViewState.Ready -> { enableUI(true) }
             is DataViewState.Refreshing -> { enableUI(true) }
             is DataViewState.Loading -> { enableUI(false) }
-            is DataViewState.Failure -> { showMessage(getString(R.string.msg_error_default)) }
+            is DataViewState.Failure -> {
+                enableUI(true)
+                binding.swipeRefresh.isRefreshing = false
+                showMessage(getString(R.string.msg_error_default)) }
         }.exhaustive
     }
 
