@@ -150,11 +150,16 @@ def getRemoteActuatorsByCentralId(centralId: int):
     result = cursor.fetchall()
     return result
 
-def createRemoteActuator(node: str):
+def createRemoteActuator(node: str, centralAddr: str = ""):
     try:
+        if(len(centralAddr) > 0):
+            centralNode = getCentralNodesByAddr(centralAddr)[0]
+            centralAddr = centralNode['NodeId']
+        else:
+            node = json.loads(node)
+            centralAddr = node['centralId']
         query = ("""INSERT INTO Nodes_Actuator (CentralId, Name, Address, ImageUrl, Status, Type, Value) VALUES (%s, %s, %s, %s, %s, %s, %s);""")
-        node = json.loads(node)
-        cursor.execute(query, (node['centralUid'],node['name'],node['address'],node['imageUrl'],node['status'],node['type'],int(node['value']),))
+        cursor.execute(query, (centralAddr,node['name'],node['address'],node['imageUrl'],node['status'],node['type'],int(node['value']),))
 
         return True
     except Exception as ex:
@@ -173,6 +178,16 @@ def setRemoteActuator(node: str):
         print(ex)
         return False
 
+
+def setRemoteActuatorStatus(id: int, status: str):
+    try:
+        query = ("""UPDATE Nodes_Actuator SET Status = %s WHERE NodeId = %s;""")
+        cursor.execute(query, (status,id,))
+
+        return True
+    except Exception as ex:
+        print(ex)
+        return False
 
 def setRemoteActuatorValue(id: int, value: int):
     try:
@@ -214,17 +229,36 @@ def getRemoteSensorsByCentralId(centralId: int):
     return result
 
 
-def createRemoteSensor(node: str):
+def createRemoteSensor(node: str, centralAddr: str = ""):
     try:
+        if(len(centralAddr) > 0):
+            centralNode = getCentralNodesByAddr(centralAddr)[0]
+            centralAddr = centralNode['NodeId']
+        else:
+            node = json.loads(node)
+            centralAddr = node['centralId']
         query = ("""INSERT INTO Nodes_Sensor (CentralId, Name, Address, ImageUrl, Status, Unit, Value) VALUES (%s, %s, %s, %s, %s, %s, %s);""")
-        node = json.loads(node)
-        cursor.execute(query, (node['centralUid'],node['name'],node['address'],node['imageUrl'],node['status'],node['unit'],int(node['value']),))
+        cursor.execute(query, (centralAddr,node['name'],node['address'],node['imageUrl'],node['status'],node['unit'],int(node['value']),))
 
         return True
     except Exception as ex:
         print(ex)
         return False
-    
+
+def createRemoteActuator(node: str, centralAddr: str = ""):
+    try:
+        if(len(centralAddr) > 0):
+            centralNode = getCentralNodesByAddr(centralAddr)[0]
+        else:
+            centralNode = node['centralId']
+            node = json.loads(node)
+        query = ("""INSERT INTO Nodes_Actuator (CentralId, Name, Address, ImageUrl, Status, Type, Value) VALUES (%s, %s, %s, %s, %s, %s, %s);""")
+        cursor.execute(query, (centralNode['NodeId'],node['name'],node['address'],node['imageUrl'],node['status'],node['type'],int(node['value']),))
+
+        return True
+    except Exception as ex:
+        print(ex)
+        return False
 
 def setRemoteSensor(node: str):
     try:
@@ -280,10 +314,27 @@ def decodeMqttMessage(topic: str, msg: str):
 
     if(field == 'status'):
         setCentralNodeStatus(central_node, msg)
+    elif(field == 'new'):
+        node = json.loads(msg)
+        nodeType = node['type']
+        node['name'] = 'Nuevo nodo'
+        node['imageUrl'] = 'https://cutt.ly/NhTMI4r'
+        node['type'] = 'ON-OFF'
+        node['unit'] = 'TODO'
+        if(nodeType == 'Actuator'):
+            print("New actuator: {} at addr {}".format(node['name'], node['address']))
+            createRemoteActuator(node, central_node)
+        else:
+            print("New sensor: {} at addr {}".format(node['name'], node['address']))
+            createRemoteActuator(node, central_node)
     elif(field.isdigit()):
         remote_node = field
         field = topic[4]
-        setRemoteSensorValueByAddr(int(remote_node), int(msg))
+        if(field == 'value'):
+            setRemoteSensorValueByAddr(int(remote_node), int(msg))
+        elif(field == 'status'):
+            setRemoteActuatorStatus(int(remote_node),msg)
+            print('Node status: {}'.format(msg))
 
 
 
